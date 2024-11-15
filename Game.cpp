@@ -23,6 +23,7 @@ Game::Game()
 
   renderer = SDL_CreateRenderer(
       window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
   if (!renderer) {
     SDL_DestroyWindow(window);
     IMG_Quit();
@@ -89,16 +90,18 @@ void Game::processInput() {
     snake.moveX(-SNAKE_SPEED);
   }
 }
-void Game::update() {
+void Game::handleFoodEating() {
   std::vector<SDL_Rect> snakeBody = snake.getBody();
 
   for (const SDL_Rect &segment : snakeBody) {
     if (checkCollision(food.getRect(), segment)) {
-      snake.handleFoodEating();
+      snake.increaseSize();
       food.reset();
     }
   }
-
+}
+void Game::update() {
+  handleFoodEating();
   processInput();
 }
 void Game::render() {

@@ -22,6 +22,7 @@ private:
 
   bool running;
   void processInput();
+  void handleFoodEating();
   void update();
   void render();
   bool checkCollision(const SDL_Rect &a, const SDL_Rect &b);

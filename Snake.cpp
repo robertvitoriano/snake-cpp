@@ -74,7 +74,7 @@ void Snake::moveX(int dx) {
 }
 const std::vector<SDL_Rect> &Snake::getBody() const { return body; }
 
-void Snake::handleFoodEating() {
+void Snake::increaseSize() {
   body.push_back({body[body.size() - 1].x - BASIC_UNITY_SIZE * body.size(),
                   body[0].y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
 }

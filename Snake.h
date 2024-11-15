@@ -10,7 +10,7 @@ public:
   Snake(int xPos, int yPos);
   void moveY(int dy);
   void moveX(int dx);
-  void handleFoodEating();
+  void increaseSize();
   const std::vector<SDL_Rect> &getBody() const;
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
 
