@@ -3,33 +3,33 @@
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
-const int PADDLE_WIDTH = 20;
-const int PADDLE_HEIGHT = 100;
-const int BALL_SIZE = 20;
-const int PADDLE_SPEED = 10;
-const int BALL_SPEED = 5;
+const int SNAKE_WIDTH = 20;
+const int SNAKE_HEIGHT = 100;
+const int FOOD_SIZE = 20;
+const int SNAKE_SPEED = 10;
+const int FOOD_SPEED = 5;
 
-struct Paddle {
+struct Snake {
   int x, y;
 };
 
-struct Ball {
+struct Food {
   int x, y, vx, vy;
 };
 
-void movePaddle(Paddle &paddle, int dy) {
+void movePaddle(Snake &paddle, int dy) {
   paddle.y += dy;
   if (paddle.y < 0)
     paddle.y = 0;
-  if (paddle.y > WINDOW_HEIGHT - PADDLE_HEIGHT)
-    paddle.y = WINDOW_HEIGHT - PADDLE_HEIGHT;
+  if (paddle.y > WINDOW_HEIGHT - SNAKE_HEIGHT)
+    paddle.y = WINDOW_HEIGHT - SNAKE_HEIGHT;
 }
 
-void resetBall(Ball &ball) {
-  ball.x = WINDOW_WIDTH / 2 - BALL_SIZE / 2;
-  ball.y = WINDOW_HEIGHT / 2 - BALL_SIZE / 2;
-  ball.vx = BALL_SPEED;
-  ball.vy = BALL_SPEED;
+void resetBall(Food &ball) {
+  ball.x = WINDOW_WIDTH / 2 - FOOD_SIZE / 2;
+  ball.y = WINDOW_HEIGHT / 2 - FOOD_SIZE / 2;
+  ball.vx = FOOD_SPEED;
+  ball.vy = FOOD_SPEED;
 }
 
 int main(int argc, char *argv[]) {
@@ -55,8 +55,8 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  Paddle playerPaddle = {20, WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2};
-  Paddle aiPaddle = {WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2};
+  Paddle playerPaddle = {20, WINDOW_HEIGHT / 2 - SNAKE_HEIGHT / 2};
+  Paddle aiPaddle = {WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - SNAKE_HEIGHT / 2};
   Ball ball;
   resetBall(ball);
 
@@ -72,24 +72,24 @@ int main(int argc, char *argv[]) {
 
     const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
     if (keyboardState[SDL_SCANCODE_UP]) {
-      movePaddle(playerPaddle, -PADDLE_SPEED);
+      movePaddle(playerPaddle, -SNAKE_SPEED);
     }
     if (keyboardState[SDL_SCANCODE_DOWN]) {
-      movePaddle(playerPaddle, PADDLE_SPEED);
+      movePaddle(playerPaddle, SNAKE_SPEED);
     }
 
     ball.x += ball.vx;
     ball.y += ball.vy;
 
-    if (ball.y <= 0 || ball.y >= WINDOW_HEIGHT - BALL_SIZE) {
+    if (ball.y <= 0 || ball.y >= WINDOW_HEIGHT - FOOD_SIZE) {
       ball.vy = -ball.vy;
     }
 
-    if ((ball.x <= playerPaddle.x + PADDLE_WIDTH &&
-         ball.y + BALL_SIZE > playerPaddle.y &&
-         ball.y < playerPaddle.y + PADDLE_HEIGHT) ||
-        (ball.x + BALL_SIZE >= aiPaddle.x && ball.y + BALL_SIZE > aiPaddle.y &&
-         ball.y < aiPaddle.y + PADDLE_HEIGHT)) {
+    if ((ball.x <= playerPaddle.x + SNAKE_WIDTH &&
+         ball.y + FOOD_SIZE > playerPaddle.y &&
+         ball.y < playerPaddle.y + SNAKE_HEIGHT) ||
+        (ball.x + FOOD_SIZE >= aiPaddle.x && ball.y + FOOD_SIZE > aiPaddle.y &&
+         ball.y < aiPaddle.y + SNAKE_HEIGHT)) {
       ball.vx = -ball.vx;
     }
 
@@ -98,23 +98,23 @@ int main(int argc, char *argv[]) {
     }
 
     if (ball.y < aiPaddle.y) {
-      movePaddle(aiPaddle, -PADDLE_SPEED / 2);
-    } else if (ball.y > aiPaddle.y + PADDLE_HEIGHT) {
-      movePaddle(aiPaddle, PADDLE_SPEED / 2);
+      movePaddle(aiPaddle, -SNAKE_SPEED / 2);
+    } else if (ball.y > aiPaddle.y + SNAKE_HEIGHT) {
+      movePaddle(aiPaddle, SNAKE_SPEED / 2);
     }
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    SDL_Rect playerRect = {playerPaddle.x, playerPaddle.y, PADDLE_WIDTH,
-                           PADDLE_HEIGHT};
+    SDL_Rect playerRect = {playerPaddle.x, playerPaddle.y, SNAKE_WIDTH,
+                           SNAKE_HEIGHT};
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderFillRect(renderer, &playerRect);
 
-    SDL_Rect aiRect = {aiPaddle.x, aiPaddle.y, PADDLE_WIDTH, PADDLE_HEIGHT};
+    SDL_Rect aiRect = {aiPaddle.x, aiPaddle.y, SNAKE_WIDTH, SNAKE_HEIGHT};
     SDL_RenderFillRect(renderer, &aiRect);
 
-    SDL_Rect ballRect = {ball.x, ball.y, BALL_SIZE, BALL_SIZE};
+    SDL_Rect ballRect = {ball.x, ball.y, FOOD_SIZE, FOOD_SIZE};
     SDL_RenderFillRect(renderer, &ballRect);
 
     SDL_RenderPresent(renderer);

@@ -3,10 +3,10 @@
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
-const int PADDLE_WIDTH = 20;
-const int PADDLE_HEIGHT = 100;
-const int BALL_SIZE = 20;
-const int PADDLE_SPEED = 10;
-const int BALL_SPEED = 5;
+const int SNAKE_WIDTH = 20;
+const int SNAKE_HEIGHT = 100;
+const int FOOD_SIZE = 20;
+const int SNAKE_SPEED = 10;
+const int FOOD_SPEED = 5;
 
 #endif

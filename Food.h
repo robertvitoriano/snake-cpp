@@ -1,11 +1,11 @@
-#ifndef BALL_H
-#define BALL_H
+#ifndef FOOD_H
+#define FOOD_H
 
 #include <SDL2/SDL.h>
 
-class Ball {
+class Food {
 public:
-  Ball();
+  Food();
   void move();
   void reset();
   const SDL_Rect &getRect();

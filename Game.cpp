@@ -3,8 +3,8 @@
 #include <iostream>
 
 Game::Game()
-    : playerPaddle(20, WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2),
-      aiPaddle(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - PADDLE_HEIGHT / 2),
+    : playerPaddle(20, WINDOW_HEIGHT / 2 - SNAKE_HEIGHT / 2),
+      aiPaddle(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - SNAKE_HEIGHT / 2),
       running(true) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
@@ -52,10 +52,10 @@ void Game::processInput() {
 
   const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
   if (keyboardState[SDL_SCANCODE_UP]) {
-    playerPaddle.move(-PADDLE_SPEED);
+    playerPaddle.move(-SNAKE_SPEED);
   }
   if (keyboardState[SDL_SCANCODE_DOWN]) {
-    playerPaddle.move(PADDLE_SPEED);
+    playerPaddle.move(SNAKE_SPEED);
   }
 }
 
@@ -72,9 +72,9 @@ void Game::update() {
   }
 
   if (ball.getRect().y < aiPaddle.getRect().y) {
-    aiPaddle.move(-PADDLE_SPEED / 2);
-  } else if (ball.getRect().y > aiPaddle.getRect().y + PADDLE_HEIGHT) {
-    aiPaddle.move(PADDLE_SPEED / 2);
+    aiPaddle.move(-SNAKE_SPEED / 2);
+  } else if (ball.getRect().y > aiPaddle.getRect().y + SNAKE_HEIGHT) {
+    aiPaddle.move(SNAKE_SPEED / 2);
   }
 }
 

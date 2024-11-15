@@ -1,11 +1,11 @@
-#ifndef PADDLE_H
-#define PADDLE_H
+#ifndef SNAKE_H
+#define SNAKE_H
 
 #include <SDL2/SDL.h>
 
-class Paddle {
+class Snake {
 public:
-  Paddle(int xPos, int yPos);
+  Snake(int xPos, int yPos);
   void move(int dy);
   const SDL_Rect &getRect();
 

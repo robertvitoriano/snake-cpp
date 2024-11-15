@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Ball.h"
-#include "Paddle.h"
+#include "Food.h"
+#include "Snake.h"
 #include <SDL2/SDL.h>
 
 class Game {
@@ -12,9 +12,9 @@ public:
   void run();
 
 private:
-  Paddle playerPaddle;
-  Paddle aiPaddle;
-  Ball ball;
+  Snake playerPaddle;
+  Snake aiPaddle;
+  Food ball;
   SDL_Window *window;
   SDL_Renderer *renderer;
   bool running;
