@@ -1,6 +1,6 @@
 #include "Renderer.h"
 
-Renderer::Renderer() {
+Renderer::Renderer() : window(nullptr), renderer(nullptr), texture(nullptr) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
   }
@@ -13,7 +13,6 @@ Renderer::Renderer() {
 
 SDL_Renderer *Renderer::createRenderer(std::string gameName) {
   if (!renderer) {
-
     window = SDL_CreateWindow(gameName.c_str(), 100, 100, WINDOW_WIDTH,
                               WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window) {
@@ -22,7 +21,7 @@ SDL_Renderer *Renderer::createRenderer(std::string gameName) {
                                std::string(SDL_GetError()));
     }
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(
+    renderer = SDL_CreateRenderer(
         window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer) {
       destroyRenderer();
@@ -37,18 +36,27 @@ SDL_Renderer *Renderer::createRenderer(std::string gameName) {
 Renderer::~Renderer() { destroyRenderer(); }
 
 SDL_Texture *Renderer::createTexture(std::string imagePath) {
-  SDL_Surface *surface = IMG_Load(imagePath.c_str());
+  if (!renderer) {
+    throw std::runtime_error("Renderer not initialized.");
+  }
 
+  SDL_Surface *surface = IMG_Load(imagePath.c_str());
   if (!surface) {
     destroyRenderer();
     throw std::runtime_error("IMG_Load Error: " + std::string(IMG_GetError()));
   }
+
   texture = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
 
+  if (!texture) {
+    destroyRenderer();
+    throw std::runtime_error("SDL_CreateTextureFromSurface Error: " +
+                             std::string(SDL_GetError()));
+  }
+
   return texture;
 }
-
 void Renderer::destroyRenderer() {
   if (renderer) {
     SDL_DestroyRenderer(renderer);

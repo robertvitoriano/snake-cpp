@@ -11,6 +11,7 @@ Snake::Snake(int xPos, int yPos) {
 
 void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
   if (body.empty()) {
+    std::cerr << "Body is empty!" << std::endl;
     return;
   }
 
@@ -68,6 +69,7 @@ void Snake::moveY(int dy) {
   }
 }
 void Snake::moveX(int dx) {
+
   if (dx > 0)
     direction = RIGHT;
   else if (dx < 0)
