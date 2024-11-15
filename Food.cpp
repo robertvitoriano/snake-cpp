@@ -1,23 +1,15 @@
 #include "Food.h"
 #include "GameConstants.h"
 
-Food::Food() { reset(); }
-
-void Food::move() {
-  x += vx;
-  y += vy;
-  if (y <= 0 || y >= WINDOW_HEIGHT - BASIC_UNITY_SIZE) {
-    vy = -vy;
-  }
-  rect.x = x;
-  rect.y = y;
+Food::Food() {
+  std::srand(std::time(nullptr));
+  reset();
 }
 
 void Food::reset() {
-  x = WINDOW_WIDTH / 2 - BASIC_UNITY_SIZE / 2;
-  y = WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2;
-  vx = FOOD_SPEED;
-  vy = FOOD_SPEED;
+  x = (std::rand() % (WINDOW_WIDTH / BASIC_UNITY_SIZE)) * BASIC_UNITY_SIZE;
+  y = (std::rand() % (WINDOW_HEIGHT / BASIC_UNITY_SIZE)) * BASIC_UNITY_SIZE;
+
   rect = {x, y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 }
 
@@ -27,6 +19,6 @@ const SDL_Rect &Food::getRect() {
   return rect;
 }
 
-void Food::reverseX() { vx = -vx; }
-
-bool Food::isOutOfBounds() const { return x < 0 || x > WINDOW_WIDTH; }
+bool Food::isOutOfBounds() const {
+  return x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT;
+}

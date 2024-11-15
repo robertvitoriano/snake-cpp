@@ -4,6 +4,7 @@
 #include "Food.h"
 #include "Snake.h"
 #include <SDL2/SDL.h>
+#include <vector>
 
 class Game {
 public:

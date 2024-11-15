@@ -64,9 +64,13 @@ void Game::processInput() {
 }
 
 void Game::update() {
+  std::vector<SDL_Rect> snakeBody = snake.getBody();
 
-  if (checkCollision(food.getRect(), snake.getRect())) {
-    std::cout << "Collision detected!" << std::endl;
+  for (const SDL_Rect &segment : snakeBody) {
+    if (checkCollision(food.getRect(), segment)) {
+      snake.handleFoodEating();
+      food.reset();
+    }
   }
 
   processInput();
@@ -77,11 +81,12 @@ void Game::render() {
   SDL_RenderClear(renderer);
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderFillRect(renderer, &snake.getRect());
-
+  std::vector<SDL_Rect> snakeBody = snake.getBody();
+  for (const SDL_Rect &segment : snakeBody) {
+    SDL_RenderFillRect(renderer, &segment);
+  }
   SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
   SDL_RenderFillRect(renderer, &food.getRect());
-
   SDL_RenderPresent(renderer);
 }
 

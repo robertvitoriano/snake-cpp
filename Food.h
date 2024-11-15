@@ -1,19 +1,18 @@
 #ifndef FOOD_H
 #define FOOD_H
-
 #include <SDL2/SDL.h>
+#include <cstdlib>
+#include <ctime>
 
 class Food {
 public:
   Food();
-  void move();
   void reset();
   const SDL_Rect &getRect();
-  void reverseX();
   bool isOutOfBounds() const;
 
 private:
-  int x, y, vx, vy;
+  int x, y;
   SDL_Rect rect;
 };
 
