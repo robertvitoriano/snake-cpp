@@ -3,6 +3,7 @@ CXXFLAGS = -Wall -std=c++17 -g
 SDL_FLAGS = $(shell sdl2-config --cflags --libs) -lSDL2_image
 
 BUILD_DIR = build
+SRC_DIR = src
 OBJECTS = $(BUILD_DIR)/main.o $(BUILD_DIR)/Snake.o $(BUILD_DIR)/Food.o $(BUILD_DIR)/Game.o $(BUILD_DIR)/Renderer.o
 
 all: $(BUILD_DIR) snake
@@ -13,20 +14,20 @@ $(BUILD_DIR):
 snake: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/snake $(OBJECTS) $(SDL_FLAGS)
 
-$(BUILD_DIR)/main.o: main.cpp Game.h
-	$(CXX) $(CXXFLAGS) -c main.cpp -o $(BUILD_DIR)/main.o
+$(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp $(SRC_DIR)/Game.h
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/main.cpp -o $(BUILD_DIR)/main.o
 
-$(BUILD_DIR)/Snake.o: Snake.cpp Snake.h
-	$(CXX) $(CXXFLAGS) -c Snake.cpp -o $(BUILD_DIR)/Snake.o
+$(BUILD_DIR)/Snake.o: $(SRC_DIR)/Snake.cpp $(SRC_DIR)/Snake.h
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Snake.cpp -o $(BUILD_DIR)/Snake.o
 
-$(BUILD_DIR)/Food.o: Food.cpp Food.h
-	$(CXX) $(CXXFLAGS) -c Food.cpp -o $(BUILD_DIR)/Food.o
+$(BUILD_DIR)/Food.o: $(SRC_DIR)/Food.cpp $(SRC_DIR)/Food.h
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Food.cpp -o $(BUILD_DIR)/Food.o
 
-$(BUILD_DIR)/Renderer.o: Renderer.cpp Renderer.h
-	$(CXX) $(CXXFLAGS) -c Renderer.cpp -o $(BUILD_DIR)/Renderer.o
+$(BUILD_DIR)/Renderer.o: $(SRC_DIR)/Renderer.cpp $(SRC_DIR)/Renderer.h
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Renderer.cpp -o $(BUILD_DIR)/Renderer.o
 
-$(BUILD_DIR)/Game.o: Game.cpp Game.h Snake.h Food.h Renderer.h
-	$(CXX) $(CXXFLAGS) -c Game.cpp -o $(BUILD_DIR)/Game.o
+$(BUILD_DIR)/Game.o: $(SRC_DIR)/Game.cpp $(SRC_DIR)/Game.h $(SRC_DIR)/Snake.h $(SRC_DIR)/Food.h $(SRC_DIR)/Renderer.h
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Game.cpp -o $(BUILD_DIR)/Game.o
 
 clean:
 	rm -f $(BUILD_DIR)/*.o $(BUILD_DIR)/snake
