@@ -2,13 +2,11 @@ CXX = g++
 CXXFLAGS = -Wall -std=c++17
 SDL_FLAGS = `sdl2-config --cflags --libs`
 
-# Ensure the build directory exists before compiling
 BUILD_DIR = build
 OBJECTS = $(BUILD_DIR)/main.o $(BUILD_DIR)/Snake.o $(BUILD_DIR)/Food.o $(BUILD_DIR)/Game.o
 
 all: $(BUILD_DIR) snake
 
-# Create the build directory if it does not exist
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 

@@ -2,8 +2,8 @@
 #define SNAKE_H
 
 #include <SDL2/SDL.h>
+#include <iostream>
 #include <vector>
-
 class Snake {
 public:
   Snake(int xPos, int yPos);
@@ -13,7 +13,6 @@ public:
   const std::vector<SDL_Rect> &getBody() const;
 
 private:
-  int x, y;
   std::vector<SDL_Rect> body;
   void updateBodyPositions();
 };

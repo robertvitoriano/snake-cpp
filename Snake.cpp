@@ -1,32 +1,70 @@
 #include "Snake.h"
 #include "GameConstants.h"
 
-Snake::Snake(int xPos, int yPos) : x(xPos), y(yPos) {
+Snake::Snake(int xPos, int yPos) {
 
-  SDL_Rect head = {x, y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+  SDL_Rect head = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+
   body.push_back(head);
 }
 
 void Snake::moveY(int dy) {
-  y += dy;
-  if (y < 0)
-    y = 0;
-  if (y > WINDOW_HEIGHT - BASIC_UNITY_SIZE)
-    y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
-  body[0].y = y;
+  for (size_t index = 0; index < body.size(); ++index) {
+
+    SDL_Rect &segment = body[index];
+    if (segment.y < 0) {
+      segment.y = 0;
+      continue;
+    }
+    if (segment.y > WINDOW_HEIGHT - BASIC_UNITY_SIZE) {
+      segment.y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
+      continue;
+    }
+
+    segment.y += dy;
+    std::cout << "Index: " << index << ", Y: " << segment.y << "\n";
+  }
 }
 void Snake::moveX(int dx) {
-  x += dx;
-  if (x < 0)
-    x = 0;
-  if (x > WINDOW_WIDTH - BASIC_UNITY_SIZE)
-    x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
-  body[0].x = x;
+
+  for (size_t index = 0; index < body.size(); ++index) {
+
+    SDL_Rect &segment = body[index];
+
+    if (index == 0) {
+      segment.x += dx;
+      continue;
+    }
+
+    if (segment.x < 0) {
+      segment.x = 0;
+    }
+    if (segment.x >= WINDOW_WIDTH - BASIC_UNITY_SIZE) {
+      std::cout << "collided with wall by right" << std::endl;
+
+      segment.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
+    }
+    if (dx > 0) {
+      std::cout << "should be moving right" << std::endl;
+      segment.x =
+          body[index - 1].x - BASIC_UNITY_SIZE - SPACE_BETWEEN_BODY_PARTS;
+    }
+    if (dx < 0) {
+      std::cout << "should be moving left" << std::endl;
+      segment.x =
+          body[index - 1].x + BASIC_UNITY_SIZE + SPACE_BETWEEN_BODY_PARTS;
+    }
+
+    segment.x += dx;
+
+    std::cout << "Index: " << index << ", x: " << segment.x << "\n";
+  }
 }
 const std::vector<SDL_Rect> &Snake::getBody() const { return body; }
 
 void Snake::handleFoodEating() {
-  body.push_back({x, y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
+  body.push_back({body[body.size() - 1].x - BASIC_UNITY_SIZE * body.size(),
+                  body[0].y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
 }
 
 void Snake::updateBodyPositions() {}
