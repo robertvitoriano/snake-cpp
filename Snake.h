@@ -6,7 +6,9 @@
 class Snake {
 public:
   Snake(int xPos, int yPos);
-  void move(int dy);
+  void moveY(int dy);
+  void moveX(int dx);
+
   const SDL_Rect &getRect();
 
 private:

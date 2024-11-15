@@ -12,9 +12,8 @@ public:
   void run();
 
 private:
-  Snake playerPaddle;
-  Snake aiPaddle;
-  Food ball;
+  Snake snake;
+  Food food;
   SDL_Window *window;
   SDL_Renderer *renderer;
   bool running;

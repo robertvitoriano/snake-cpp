@@ -3,9 +3,7 @@
 #include <iostream>
 
 Game::Game()
-    : playerPaddle(20, WINDOW_HEIGHT / 2 - SNAKE_HEIGHT / 2),
-      aiPaddle(WINDOW_WIDTH - 40, WINDOW_HEIGHT / 2 - SNAKE_HEIGHT / 2),
-      running(true) {
+    : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
   }
@@ -36,7 +34,6 @@ Game::~Game() {
 
 void Game::run() {
   while (running) {
-    processInput();
     update();
     render();
   }
@@ -51,31 +48,28 @@ void Game::processInput() {
   }
 
   const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
+
   if (keyboardState[SDL_SCANCODE_UP]) {
-    playerPaddle.move(-SNAKE_SPEED);
+    snake.moveY(-SNAKE_SPEED);
   }
   if (keyboardState[SDL_SCANCODE_DOWN]) {
-    playerPaddle.move(SNAKE_SPEED);
+    snake.moveY(SNAKE_SPEED);
+  }
+  if (keyboardState[SDL_SCANCODE_RIGHT]) {
+    snake.moveX(SNAKE_SPEED);
+  }
+  if (keyboardState[SDL_SCANCODE_LEFT]) {
+    snake.moveX(-SNAKE_SPEED);
   }
 }
 
 void Game::update() {
-  ball.move();
 
-  if (checkCollision(ball.getRect(), playerPaddle.getRect()) ||
-      checkCollision(ball.getRect(), aiPaddle.getRect())) {
-    ball.reverseX();
+  if (checkCollision(food.getRect(), snake.getRect())) {
+    std::cout << "Collision detected!" << std::endl;
   }
 
-  if (ball.isOutOfBounds()) {
-    ball.reset();
-  }
-
-  if (ball.getRect().y < aiPaddle.getRect().y) {
-    aiPaddle.move(-SNAKE_SPEED / 2);
-  } else if (ball.getRect().y > aiPaddle.getRect().y + SNAKE_HEIGHT) {
-    aiPaddle.move(SNAKE_SPEED / 2);
-  }
+  processInput();
 }
 
 void Game::render() {
@@ -83,13 +77,15 @@ void Game::render() {
   SDL_RenderClear(renderer);
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderFillRect(renderer, &playerPaddle.getRect());
-  SDL_RenderFillRect(renderer, &aiPaddle.getRect());
-  SDL_RenderFillRect(renderer, &ball.getRect());
+  SDL_RenderFillRect(renderer, &snake.getRect());
+
+  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+  SDL_RenderFillRect(renderer, &food.getRect());
 
   SDL_RenderPresent(renderer);
 }
 
 bool Game::checkCollision(const SDL_Rect &a, const SDL_Rect &b) {
+
   return SDL_HasIntersection(&a, &b);
 }
