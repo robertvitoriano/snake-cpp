@@ -8,6 +8,22 @@ Snake::Snake(int xPos, int yPos) {
   body.push_back(head);
 }
 
+void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
+
+  if (body.empty()) {
+    return;
+  }
+
+  SDL_Rect snakeHeadSrcRect = {32, 32, 32, 32};
+
+  SDL_RenderCopy(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0]);
+
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  for (size_t i = 1; i < body.size(); ++i) {
+    SDL_RenderFillRect(renderer, &body[i]);
+  }
+}
+
 void Snake::moveY(int dy) {
   for (size_t index = 0; index < body.size(); ++index) {
 
@@ -40,17 +56,13 @@ void Snake::moveX(int dx) {
       segment.x = 0;
     }
     if (segment.x >= WINDOW_WIDTH - BASIC_UNITY_SIZE) {
-      std::cout << "collided with wall by right" << std::endl;
-
       segment.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
     }
     if (dx > 0) {
-      std::cout << "should be moving right" << std::endl;
       segment.x =
           body[index - 1].x - BASIC_UNITY_SIZE - SPACE_BETWEEN_BODY_PARTS;
     }
     if (dx < 0) {
-      std::cout << "should be moving left" << std::endl;
       segment.x =
           body[index - 1].x + BASIC_UNITY_SIZE + SPACE_BETWEEN_BODY_PARTS;
     }

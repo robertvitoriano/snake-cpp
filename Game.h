@@ -19,7 +19,6 @@ private:
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Texture *spritesheetTexture;
-  SDL_Rect snakeHeadSrcRect;
 
   bool running;
   void processInput();

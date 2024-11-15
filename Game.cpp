@@ -51,8 +51,6 @@ Game::Game()
     throw std::runtime_error("SDL_CreateTextureFromSurface Error: " +
                              std::string(SDL_GetError()));
   }
-
-  snakeHeadSrcRect = {32, 32, 32, 32};
 }
 
 Game::~Game() {
@@ -107,23 +105,8 @@ void Game::render() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_RenderClear(renderer);
 
-  std::vector<SDL_Rect> snakeBody = snake.getBody();
-
-  // Render the head using the spritesheet
-  if (!snakeBody.empty()) {
-    SDL_RenderCopy(renderer, spritesheetTexture, &snakeHeadSrcRect,
-                   &snakeBody[0]);
-  }
-
-  // Render the rest of the body as white rectangles
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  for (size_t i = 1; i < snakeBody.size(); ++i) {
-    SDL_RenderFillRect(renderer, &snakeBody[i]);
-  }
-
-  // Render the food
-  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-  SDL_RenderFillRect(renderer, &food.getRect());
+  snake.render(renderer, spritesheetTexture);
+  food.render(renderer);
 
   SDL_RenderPresent(renderer);
 }

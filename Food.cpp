@@ -13,6 +13,11 @@ void Food::reset() {
   rect = {x, y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 }
 
+void Food::render(SDL_Renderer *renderer) {
+  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+  SDL_RenderFillRect(renderer, &rect);
+}
+
 const SDL_Rect &Food::getRect() {
   rect.x = x;
   rect.y = y;

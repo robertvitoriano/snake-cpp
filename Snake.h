@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>
+
 class Snake {
 public:
   Snake(int xPos, int yPos);
@@ -11,6 +12,7 @@ public:
   void moveX(int dx);
   void handleFoodEating();
   const std::vector<SDL_Rect> &getBody() const;
+  void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
 
 private:
   std::vector<SDL_Rect> body;
