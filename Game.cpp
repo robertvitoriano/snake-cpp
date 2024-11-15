@@ -3,64 +3,21 @@
 
 Game::Game()
     : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true) {
-  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-    throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
-  }
 
-  if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-    SDL_Quit();
-    throw std::runtime_error("IMG_Init Error: " + std::string(IMG_GetError()));
-  }
-
-  window = SDL_CreateWindow("Snake Game", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT,
-                            SDL_WINDOW_SHOWN);
-  if (!window) {
-    IMG_Quit();
-    SDL_Quit();
-    throw std::runtime_error("SDL_CreateWindow Error: " +
-                             std::string(SDL_GetError()));
-  }
-
-  renderer = SDL_CreateRenderer(
-      window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-  if (!renderer) {
-    SDL_DestroyWindow(window);
-    IMG_Quit();
-    SDL_Quit();
-    throw std::runtime_error("SDL_CreateRenderer Error: " +
-                             std::string(SDL_GetError()));
-  }
-
-  SDL_Surface *surface = IMG_Load("assets/spritesheet.png");
-
-  if (!surface) {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    IMG_Quit();
-    SDL_Quit();
-    throw std::runtime_error("IMG_Load Error: " + std::string(IMG_GetError()));
-  }
-  spritesheetTexture = SDL_CreateTextureFromSurface(renderer, surface);
-  SDL_FreeSurface(surface);
+  gameRenderer = renderer.createRenderer("Snake Game");
+  spritesheetTexture = renderer.createTexture("assets/spritesheet.png");
 
   if (!spritesheetTexture) {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    IMG_Quit();
-    SDL_Quit();
-    throw std::runtime_error("SDL_CreateTextureFromSurface Error: " +
-                             std::string(SDL_GetError()));
+    renderer.destroyRenderer();
+    throw std::runtime_error("Failed to load spritesheet texture");
   }
 }
 
 Game::~Game() {
   SDL_DestroyTexture(spritesheetTexture);
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
-  IMG_Quit();
-  SDL_Quit();
+  renderer.destroyRenderer();
 }
+
 void Game::run() {
   while (running) {
     update();
@@ -105,13 +62,13 @@ void Game::update() {
   processInput();
 }
 void Game::render() {
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_RenderClear(renderer);
+  SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 255);
+  SDL_RenderClear(gameRenderer);
 
-  snake.render(renderer, spritesheetTexture);
-  food.render(renderer, spritesheetTexture);
+  snake.render(gameRenderer, spritesheetTexture);
+  food.render(gameRenderer, spritesheetTexture);
 
-  SDL_RenderPresent(renderer);
+  SDL_RenderPresent(gameRenderer);
 }
 
 bool Game::checkCollision(const SDL_Rect &a, const SDL_Rect &b) {

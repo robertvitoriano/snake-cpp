@@ -2,9 +2,9 @@
 #define GAME_H
 
 #include "Food.h"
+#include "Renderer.h"
 #include "Snake.h"
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <vector>
 
 class Game {
@@ -17,7 +17,8 @@ private:
   Snake snake;
   Food food;
   SDL_Window *window;
-  SDL_Renderer *renderer;
+  SDL_Renderer *gameRenderer;
+  Renderer renderer;
   SDL_Texture *spritesheetTexture;
 
   bool running;
