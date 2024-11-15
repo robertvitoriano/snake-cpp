@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++17
-SDL_FLAGS = `sdl2-config --cflags --libs`
+SDL_FLAGS = $(shell sdl2-config --cflags --libs) -lSDL2_image
 
 BUILD_DIR = build
 OBJECTS = $(BUILD_DIR)/main.o $(BUILD_DIR)/Snake.o $(BUILD_DIR)/Food.o $(BUILD_DIR)/Game.o
