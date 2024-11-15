@@ -20,7 +20,7 @@ private:
   SDL_Renderer *gameRenderer;
   Renderer renderer;
   SDL_Texture *spritesheetTexture;
-
+  SDL_Texture *backgroundTexture;
   bool running;
   void processInput();
   void handleFoodEating();
