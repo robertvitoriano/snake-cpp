@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+enum Direction { UP, RIGHT, DOWN, LEFT };
+
 class Snake {
 public:
   Snake(int xPos, int yPos);
@@ -17,6 +19,7 @@ public:
 private:
   std::vector<SDL_Rect> body;
   void updateBodyPositions();
+  Direction direction;
 };
 
 #endif

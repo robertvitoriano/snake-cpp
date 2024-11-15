@@ -109,7 +109,7 @@ void Game::render() {
   SDL_RenderClear(renderer);
 
   snake.render(renderer, spritesheetTexture);
-  food.render(renderer);
+  food.render(renderer, spritesheetTexture);
 
   SDL_RenderPresent(renderer);
 }

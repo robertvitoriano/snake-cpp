@@ -5,28 +5,52 @@ Snake::Snake(int xPos, int yPos) {
 
   SDL_Rect head = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 
+  direction = RIGHT;
   body.push_back(head);
 }
 
 void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
-
   if (body.empty()) {
     return;
   }
 
   SDL_Rect snakeHeadSrcRect = {32, 32, 32, 32};
-
   SDL_Rect bodySrcRect = {32, 0, 32, 32};
 
-  SDL_RenderCopy(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0]);
+  double angle = 0.0;
+  std::cout << "ANGLE: " << angle << std::endl;
 
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  switch (direction) {
+  case RIGHT:
+    angle = 90.0;
+    break;
+  case DOWN:
+    angle = 180.0;
+    break;
+  case LEFT:
+    angle = -90;
+    break;
+  case UP:
+    angle = 0;
+    break;
+  }
+  std::cout << "DIRECTION:" << direction << std::endl;
+
+  SDL_RenderCopyEx(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0],
+                   angle, nullptr, SDL_FLIP_NONE);
+
   for (size_t i = 1; i < body.size(); ++i) {
     SDL_RenderCopy(renderer, spritesheetTexture, &bodySrcRect, &body[i]);
   }
 }
 
 void Snake::moveY(int dy) {
+
+  if (dy > 0)
+    direction = DOWN;
+  else if (dy < 0)
+    direction = UP;
+
   for (size_t index = 0; index < body.size(); ++index) {
 
     SDL_Rect &segment = body[index];
@@ -44,6 +68,10 @@ void Snake::moveY(int dy) {
   }
 }
 void Snake::moveX(int dx) {
+  if (dx > 0)
+    direction = RIGHT;
+  else if (dx < 0)
+    direction = LEFT;
 
   for (size_t index = 0; index < body.size(); ++index) {
 

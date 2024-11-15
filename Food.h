@@ -8,7 +8,7 @@ class Food {
 public:
   Food();
   void reset();
-  void render(SDL_Renderer *renderer);
+  void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   const SDL_Rect &getRect();
   bool isOutOfBounds() const;
 

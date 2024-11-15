@@ -13,9 +13,9 @@ void Food::reset() {
   rect = {x, y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 }
 
-void Food::render(SDL_Renderer *renderer) {
-  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-  SDL_RenderFillRect(renderer, &rect);
+void Food::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
+  SDL_Rect foodRect = {0, 32, 32, 32};
+  SDL_RenderCopy(renderer, spritesheetTexture, &foodRect, &rect);
 }
 
 const SDL_Rect &Food::getRect() {
