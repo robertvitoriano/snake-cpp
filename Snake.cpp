@@ -16,11 +16,13 @@ void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
 
   SDL_Rect snakeHeadSrcRect = {32, 32, 32, 32};
 
+  SDL_Rect bodySrcRect = {32, 0, 32, 32};
+
   SDL_RenderCopy(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0]);
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   for (size_t i = 1; i < body.size(); ++i) {
-    SDL_RenderFillRect(renderer, &body[i]);
+    SDL_RenderCopy(renderer, spritesheetTexture, &bodySrcRect, &body[i]);
   }
 }
 
