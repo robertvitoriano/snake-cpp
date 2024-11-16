@@ -5,7 +5,10 @@ Snake::Snake(int xPos, int yPos) {
 
   SDL_Rect head = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 
-  direction = RIGHT;
+  xDirection = RIGHT;
+
+  dx = 0, dy = 0;
+
   body.push_back(head);
 }
 
@@ -15,27 +18,11 @@ void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
     return;
   }
 
-  SDL_Rect snakeHeadSrcRect = {32, 32, 32, 32};
-  SDL_Rect bodySrcRect = {32, 0, 32, 32};
+  const SDL_Rect snakeHeadSrcRect = {32, 32, BASIC_UNITY_SIZE,
+                                     BASIC_UNITY_SIZE};
+  const SDL_Rect bodySrcRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 
-  double angle = 0.0;
-  std::cout << "ANGLE: " << angle << std::endl;
-
-  switch (direction) {
-  case RIGHT:
-    angle = 90.0;
-    break;
-  case DOWN:
-    angle = 180.0;
-    break;
-  case LEFT:
-    angle = -90;
-    break;
-  case UP:
-    angle = 0;
-    break;
-  }
-  std::cout << "DIRECTION:" << direction << std::endl;
+  double angle = calculateAngle();
 
   SDL_RenderCopyEx(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0],
                    angle, nullptr, SDL_FLIP_NONE);
@@ -44,13 +31,38 @@ void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
     SDL_RenderCopy(renderer, spritesheetTexture, &bodySrcRect, &body[i]);
   }
 }
+double Snake::calculateAngle() {
+  if (dx + body[0].x != body[0].x) {
+    dx = 0;
+    if (xDirection == LEFT)
+      return -90.0;
+    if (xDirection == RIGHT)
+      return 90;
+  }
 
-void Snake::moveY(int dy) {
+  if (dy + body[0].y != body[0].y) {
+    dy = 0;
 
-  if (dy > 0)
-    direction = DOWN;
-  else if (dy < 0)
-    direction = UP;
+    if (yDirection == DOWN) {
+      return 180;
+    }
+    if (yDirection == UP) {
+      return -180.0;
+    }
+  }
+
+  return 90.0;
+}
+
+void Snake::moveY(int speed) {
+
+  dy = speed;
+
+  if (dy > 0) {
+    yDirection = DOWN;
+  } else if (dy < 0) {
+    yDirection = UP;
+  }
 
   for (size_t index = 0; index < body.size(); ++index) {
 
@@ -65,15 +77,16 @@ void Snake::moveY(int dy) {
     }
 
     segment.y += dy;
-    std::cout << "Index: " << index << ", Y: " << segment.y << "\n";
   }
 }
-void Snake::moveX(int dx) {
+void Snake::moveX(int speed) {
+
+  dx = speed;
 
   if (dx > 0)
-    direction = RIGHT;
+    xDirection = RIGHT;
   else if (dx < 0)
-    direction = LEFT;
+    xDirection = LEFT;
 
   for (size_t index = 0; index < body.size(); ++index) {
 
@@ -100,19 +113,18 @@ void Snake::moveX(int dx) {
     }
 
     segment.x += dx;
-
-    std::cout << "Index: " << index << ", x: " << segment.x << "\n";
   }
 }
 const std::vector<SDL_Rect> &Snake::getBody() const { return body; }
 
 void Snake::increaseSize() {
-  if (direction == RIGHT) {
+  std::cout << "collision, should inscrease" << std::endl;
+  if (xDirection == RIGHT) {
     body.push_back(
         {(int)body[body.size() - 1].x - BASIC_UNITY_SIZE * (int)body.size(),
          (int)body[0].y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
   }
-  if (direction == LEFT) {
+  if (xDirection == LEFT) {
     body.push_back(
         {(int)body[body.size() - 1].x + BASIC_UNITY_SIZE * (int)body.size(),
          (int)body[0].y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});

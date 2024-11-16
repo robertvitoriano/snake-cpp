@@ -5,13 +5,14 @@
 #include <iostream>
 #include <vector>
 
-enum Direction { UP, RIGHT, DOWN, LEFT };
+enum XDirection { RIGHT, LEFT };
+enum YDirection { UP, DOWN };
 
 class Snake {
 public:
   Snake(int xPos, int yPos);
-  void moveY(int dy);
-  void moveX(int dx);
+  void moveY(int speed);
+  void moveX(int speed);
   void increaseSize();
   const std::vector<SDL_Rect> &getBody() const;
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
@@ -19,7 +20,10 @@ public:
 private:
   std::vector<SDL_Rect> body;
   void updateBodyPositions();
-  Direction direction;
+  double calculateAngle();
+  YDirection yDirection;
+  XDirection xDirection;
+  int dx, dy;
 };
 
 #endif
