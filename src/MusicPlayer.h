@@ -2,12 +2,13 @@
 #define MUSIC_PLAYER_H
 #include <SDL2/SDL_mixer.h>
 
+#include <string>
 class MusicPlayer {
  public:
   MusicPlayer();
   ~MusicPlayer();
   void destroy();
-  void play(const std::string musicPath);
+  void play(std::string musicPath);
 };
 
 #endif

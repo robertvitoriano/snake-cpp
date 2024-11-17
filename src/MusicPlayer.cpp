@@ -10,7 +10,7 @@ MusicPlayer::MusicPlayer() {
 
 MusicPlayer::~MusicPlayer() { destroy(); }
 
-void MusicPlayer::play(const std::string musicPath) {
+void MusicPlayer::play(std::string musicPath) {
   Mix_Music *backgroundMusic = Mix_LoadMUS(musicPath.c_str());
   if (!backgroundMusic) {
     throw std::runtime_error("Failed to load background music! Error: " + std::string(Mix_GetError()));
