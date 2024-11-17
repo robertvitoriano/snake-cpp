@@ -2,14 +2,14 @@
 #define GAME_H
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
 
+#include <string>
 #include <vector>
 
 #include "Food.h"
+#include "MusicPlayer.h"
 #include "Renderer.h"
 #include "Snake.h"
-
 class Game {
  public:
   Game();
@@ -22,6 +22,7 @@ class Game {
   SDL_Window *window;
   SDL_Renderer *gameRenderer;
   Renderer renderer;
+  MusicPlayer musicPlayer;
   SDL_Texture *spritesheetTexture;
   SDL_Texture *backgroundTexture;
   bool running;

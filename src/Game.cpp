@@ -3,23 +3,6 @@
 #include "GameConstants.h"
 
 Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true) {
-  // Initialize SDL Mixer
-  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-    throw std::runtime_error("SDL_mixer could not initialize! Error: " + std::string(Mix_GetError()));
-  }
-
-  // Load background music
-  Mix_Music *backgroundMusic = Mix_LoadMUS("assets/background.mp3");
-  if (!backgroundMusic) {
-    throw std::runtime_error("Failed to load background music! Error: " + std::string(Mix_GetError()));
-  }
-
-  // Play background music (loop indefinitely)
-  if (Mix_PlayMusic(backgroundMusic, -1) == -1) {
-    throw std::runtime_error("Failed to play background music! Error: " + std::string(Mix_GetError()));
-  }
-
-  // Initialize Renderer
   gameRenderer = renderer.createRenderer("Snake Game");
   spritesheetTexture = renderer.createTexture("assets/spritesheet.png");
 
@@ -31,15 +14,12 @@ Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true
   SDL_Surface *backgroundSurface = IMG_Load("assets/background.png");
   backgroundTexture = SDL_CreateTextureFromSurface(gameRenderer, backgroundSurface);
   SDL_FreeSurface(backgroundSurface);
+  musicPlayer.play("assets/background.mp3");
 }
 
 Game::~Game() {
   SDL_DestroyTexture(spritesheetTexture);
   SDL_DestroyTexture(backgroundTexture);
-
-  // Stop and close audio
-  Mix_HaltMusic();
-  Mix_CloseAudio();
 
   renderer.destroyRenderer();
 }
