@@ -128,11 +128,4 @@ void Snake::moveX(int dx) {
 }
 const std::vector<SDL_Rect> &Snake::getBody() const { return body; }
 
-void Snake::increaseSize() {
-  if (direction == RIGHT) {
-    body.push_back({0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
-  }
-  if (direction == LEFT) {
-    body.push_back({0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
-  }
-}
+void Snake::increaseSize() { body.push_back({0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}); }
