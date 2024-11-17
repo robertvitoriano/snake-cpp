@@ -73,7 +73,6 @@ void Snake::renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetText
 
       continue;
     }
-    SDL_RenderCopy(renderer, spritesheetTexture, &bodySourceRect, &body[i]);
   }
 }
 
