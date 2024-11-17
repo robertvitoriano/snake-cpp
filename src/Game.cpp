@@ -1,9 +1,25 @@
 #include "Game.h"
+
 #include "GameConstants.h"
 
-Game::Game()
-    : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true) {
+Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true) {
+  // Initialize SDL Mixer
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+    throw std::runtime_error("SDL_mixer could not initialize! Error: " + std::string(Mix_GetError()));
+  }
 
+  // Load background music
+  Mix_Music *backgroundMusic = Mix_LoadMUS("assets/background.mp3");
+  if (!backgroundMusic) {
+    throw std::runtime_error("Failed to load background music! Error: " + std::string(Mix_GetError()));
+  }
+
+  // Play background music (loop indefinitely)
+  if (Mix_PlayMusic(backgroundMusic, -1) == -1) {
+    throw std::runtime_error("Failed to play background music! Error: " + std::string(Mix_GetError()));
+  }
+
+  // Initialize Renderer
   gameRenderer = renderer.createRenderer("Snake Game");
   spritesheetTexture = renderer.createTexture("assets/spritesheet.png");
 
@@ -11,16 +27,19 @@ Game::Game()
     renderer.destroyRenderer();
     throw std::runtime_error("Failed to load spritesheet texture");
   }
-  SDL_Surface *backgroundSurface = IMG_Load("assets/background.png");
 
-  backgroundTexture =
-      SDL_CreateTextureFromSurface(gameRenderer, backgroundSurface);
+  SDL_Surface *backgroundSurface = IMG_Load("assets/background.png");
+  backgroundTexture = SDL_CreateTextureFromSurface(gameRenderer, backgroundSurface);
   SDL_FreeSurface(backgroundSurface);
 }
 
 Game::~Game() {
   SDL_DestroyTexture(spritesheetTexture);
   SDL_DestroyTexture(backgroundTexture);
+
+  // Stop and close audio
+  Mix_HaltMusic();
+  Mix_CloseAudio();
 
   renderer.destroyRenderer();
 }
@@ -31,6 +50,7 @@ void Game::run() {
     render();
   }
 }
+
 void Game::processInput() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
@@ -69,14 +89,12 @@ void Game::update() {
   processInput();
 }
 void Game::render() {
-
   SDL_RenderClear(gameRenderer);
 
   SDL_Rect backgroundRectSrc = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
   SDL_Rect backgroundRectDest = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
-  SDL_RenderCopy(gameRenderer, backgroundTexture, &backgroundRectSrc,
-                 &backgroundRectDest);
+  SDL_RenderCopy(gameRenderer, backgroundTexture, &backgroundRectSrc, &backgroundRectDest);
 
   snake.render(gameRenderer, spritesheetTexture);
   food.render(gameRenderer, spritesheetTexture);
@@ -84,7 +102,4 @@ void Game::render() {
   SDL_RenderPresent(gameRenderer);
 }
 
-bool Game::checkCollision(const SDL_Rect &a, const SDL_Rect &b) {
-
-  return SDL_HasIntersection(&a, &b);
-}
+bool Game::checkCollision(const SDL_Rect &a, const SDL_Rect &b) { return SDL_HasIntersection(&a, &b); }
