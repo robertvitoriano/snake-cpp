@@ -37,8 +37,17 @@ void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
   SDL_RenderCopyEx(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0], angle, nullptr, SDL_FLIP_NONE);
 
   for (size_t i = 1; i < body.size(); ++i) {
-    SDL_Rect bodySrcRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-    SDL_RenderCopy(renderer, spritesheetTexture, &bodySrcRect, &body[i]);
+    SDL_Rect bodySourceRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+    SDL_Rect const *bodyHead = &body[0];
+    if (direction == UP) {
+      SDL_Rect bodyDestinationRect = {bodyHead->x, bodyHead->y + BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
+                                      BASIC_UNITY_SIZE};
+      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 90.0, nullptr,
+                       SDL_FLIP_NONE);
+
+      continue;
+    }
+    SDL_RenderCopy(renderer, spritesheetTexture, &bodySourceRect, &body[i]);
   }
 }
 
