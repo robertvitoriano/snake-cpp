@@ -47,6 +47,14 @@ void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
 
       continue;
     }
+    if (direction == DOWN) {
+      SDL_Rect bodyDestinationRect = {bodyHead->x, bodyHead->y - BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
+                                      BASIC_UNITY_SIZE};
+      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 90.0, nullptr,
+                       SDL_FLIP_NONE);
+
+      continue;
+    }
     SDL_RenderCopy(renderer, spritesheetTexture, &bodySourceRect, &body[i]);
   }
 }
