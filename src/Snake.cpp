@@ -33,12 +33,30 @@ void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
       angle = 0;
       break;
   }
-
   SDL_RenderCopyEx(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0], angle, nullptr, SDL_FLIP_NONE);
 
+  renderSnakeBody(renderer, spritesheetTexture);
+}
+
+void Snake::renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
   for (size_t i = 1; i < body.size(); ++i) {
     SDL_Rect bodySourceRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
     SDL_Rect const *bodyHead = &body[0];
+    if (direction == LEFT) {
+      SDL_Rect bodyDestinationRect = {bodyHead->x + BASIC_UNITY_SIZE * i, bodyHead->y, BASIC_UNITY_SIZE,
+                                      BASIC_UNITY_SIZE};
+      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 0, nullptr, SDL_FLIP_NONE);
+
+      continue;
+    }
+    if (direction == RIGHT) {
+      SDL_Rect bodyDestinationRect = {bodyHead->x - BASIC_UNITY_SIZE * i, bodyHead->y, BASIC_UNITY_SIZE,
+                                      BASIC_UNITY_SIZE};
+      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 0, nullptr, SDL_FLIP_NONE);
+
+      continue;
+    }
+
     if (direction == UP) {
       SDL_Rect bodyDestinationRect = {bodyHead->x, bodyHead->y + BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
                                       BASIC_UNITY_SIZE};
@@ -113,13 +131,9 @@ const std::vector<SDL_Rect> &Snake::getBody() const { return body; }
 
 void Snake::increaseSize() {
   if (direction == RIGHT) {
-    body.push_back({(int)body[body.size() - 1].x - BASIC_UNITY_SIZE * (int)body.size(), (int)body[0].y,
-                    BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
+    body.push_back({0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
   }
   if (direction == LEFT) {
-    body.push_back({(int)body[body.size() - 1].x + BASIC_UNITY_SIZE * (int)body.size(), (int)body[0].y,
-                    BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
+    body.push_back({0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE});
   }
 }
-
-void Snake::updateBodyPositions() {}
