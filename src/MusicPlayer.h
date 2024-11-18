@@ -9,6 +9,7 @@ class MusicPlayer {
   ~MusicPlayer();
   void destroy();
   void play(std::string musicPath);
+  void setVolume(int volume);
 };
 
 #endif

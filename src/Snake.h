@@ -27,11 +27,8 @@ class Snake {
   void renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void turnSnakeBodySegmentUp(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void handleBodyTurnUpAnimation(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
+  void renderSnakeHead(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   Direction direction;
-  Uint32 timeStartedToTurnUp;
-  Uint32 timeStartedToTurnDown;
-
-  Uint32 turnUpDelay;
 };
 
 #endif
