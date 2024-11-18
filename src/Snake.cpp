@@ -2,7 +2,8 @@
 
 #include "GameConstants.h"
 
-Snake::Snake(int xPos, int yPos) {
+Snake::Snake(int xPos, int yPos) : turnUpDelay(200), timeStartedToTurnUp(0), timeStartedToTurnDown(0) {
+  bodySourceRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   SDL_Rect headRect = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   body.push_back({headRect, 0});
   direction = RIGHT;
@@ -40,7 +41,6 @@ void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
 
 void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   for (size_t i = 1; i < body.size(); ++i) {
-    SDL_Rect bodySourceRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
     SnakeSegment const* bodyHead = &body[0];
     if (direction == LEFT) {
       SDL_Rect bodyDestinationRect = {bodyHead->rect.x + BASIC_UNITY_SIZE * i, bodyHead->rect.y, BASIC_UNITY_SIZE,
@@ -58,10 +58,20 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
     }
 
     if (direction == UP) {
-      SDL_Rect bodyDestinationRect = {bodyHead->rect.x, bodyHead->rect.y + BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
-                                      BASIC_UNITY_SIZE};
-      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 90.0, nullptr,
-                       SDL_FLIP_NONE);
+      if (timeStartedToTurnUp != 0) {
+        timeStartedToTurnUp = SDL_GetTicks();
+      }
+      if (i > SEGMENTS_LIMIT_TO_MOVE_BODY_FOWARD && body[i].angle == 0 &&
+          (SDL_GetTicks() - timeStartedToTurnUp) >= turnUpDelay) {
+        turnSnakeBodySegmentUp(i, renderer, spritesheetTexture);
+        if (i == (body.size() - 1)) {
+          timeStartedToTurnUp = 0;
+        }
+      }
+      if (i <= SEGMENTS_LIMIT_TO_MOVE_BODY_FOWARD) {
+        std::cout << " should turn up body segment at index: " << i << std::endl;
+        turnSnakeBodySegmentUp(i, renderer, spritesheetTexture);
+      }
 
       continue;
     }
@@ -74,6 +84,14 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
       continue;
     }
   }
+}
+
+void Snake::turnSnakeBodySegmentUp(int snakeBodyIndex, SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
+  SDL_Rect bodyDestinationRect = {body[0].rect.x, body[0].rect.y + BASIC_UNITY_SIZE * snakeBodyIndex, BASIC_UNITY_SIZE,
+                                  BASIC_UNITY_SIZE};
+  SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 90.0, nullptr, SDL_FLIP_NONE);
+  SnakeSegment snakeSegmentTurned = {bodyDestinationRect, 90.0};
+  body[snakeBodyIndex] = snakeSegmentTurned;
 }
 
 void Snake::moveY(int dy) {
@@ -106,7 +124,6 @@ void Snake::moveX(int dx) {
   SnakeSegment& headSegment = body[0];
   headSegment.rect.x += dx;
 
-  // Ensure head stays within the screen bounds
   if (headSegment.rect.x < 0) headSegment.rect.x = 0;
   if (headSegment.rect.x > WINDOW_WIDTH - BASIC_UNITY_SIZE) headSegment.rect.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
 }
@@ -116,5 +133,5 @@ const std::vector<SnakeSegment>& Snake::getBody() const { return body; }
 void Snake::increaseSize() {
   const SnakeSegment& tailSegment = body.back();
   SDL_Rect newSegmentRect = {tailSegment.rect.x, tailSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-  body.push_back({newSegmentRect, tailSegment.angle});
+  body.push_back({newSegmentRect, 0.0});
 }
