@@ -3,54 +3,54 @@
 #include "GameConstants.h"
 
 Snake::Snake(int xPos, int yPos) {
-  SDL_Rect head = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-
+  SDL_Rect headRect = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+  body.push_back({headRect, 0});
   direction = RIGHT;
-  body.push_back(head);
 }
 
-void Snake::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
+void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   if (body.empty()) {
     std::cerr << "Body is empty!" << std::endl;
     return;
   }
 
   SDL_Rect snakeHeadSrcRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-
-  double angle = 0.0;
+  SnakeSegment& headSegment = body[0];
 
   switch (direction) {
     case RIGHT:
-      angle = 90.0;
+      headSegment.angle = 90.0;
       break;
     case DOWN:
-      angle = 180.0;
+      headSegment.angle = 180.0;
       break;
     case LEFT:
-      angle = -90;
+      headSegment.angle = -90.0;
       break;
     case UP:
-      angle = 0;
+      headSegment.angle = 0.0;
       break;
   }
-  SDL_RenderCopyEx(renderer, spritesheetTexture, &snakeHeadSrcRect, &body[0], angle, nullptr, SDL_FLIP_NONE);
+
+  SDL_RenderCopyEx(renderer, spritesheetTexture, &snakeHeadSrcRect, &headSegment.rect, headSegment.angle, nullptr,
+                   SDL_FLIP_NONE);
 
   renderSnakeBody(renderer, spritesheetTexture);
 }
 
-void Snake::renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
+void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   for (size_t i = 1; i < body.size(); ++i) {
     SDL_Rect bodySourceRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-    SDL_Rect const *bodyHead = &body[0];
+    SnakeSegment const* bodyHead = &body[0];
     if (direction == LEFT) {
-      SDL_Rect bodyDestinationRect = {bodyHead->x + BASIC_UNITY_SIZE * i, bodyHead->y, BASIC_UNITY_SIZE,
+      SDL_Rect bodyDestinationRect = {bodyHead->rect.x + BASIC_UNITY_SIZE * i, bodyHead->rect.y, BASIC_UNITY_SIZE,
                                       BASIC_UNITY_SIZE};
       SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 0, nullptr, SDL_FLIP_NONE);
 
       continue;
     }
     if (direction == RIGHT) {
-      SDL_Rect bodyDestinationRect = {bodyHead->x - BASIC_UNITY_SIZE * i, bodyHead->y, BASIC_UNITY_SIZE,
+      SDL_Rect bodyDestinationRect = {bodyHead->rect.x - BASIC_UNITY_SIZE * i, bodyHead->rect.y, BASIC_UNITY_SIZE,
                                       BASIC_UNITY_SIZE};
       SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 0, nullptr, SDL_FLIP_NONE);
 
@@ -58,7 +58,7 @@ void Snake::renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetText
     }
 
     if (direction == UP) {
-      SDL_Rect bodyDestinationRect = {bodyHead->x, bodyHead->y + BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
+      SDL_Rect bodyDestinationRect = {bodyHead->rect.x, bodyHead->rect.y + BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
                                       BASIC_UNITY_SIZE};
       SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 90.0, nullptr,
                        SDL_FLIP_NONE);
@@ -66,7 +66,7 @@ void Snake::renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetText
       continue;
     }
     if (direction == DOWN) {
-      SDL_Rect bodyDestinationRect = {bodyHead->x, bodyHead->y - BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
+      SDL_Rect bodyDestinationRect = {bodyHead->rect.x, bodyHead->rect.y - BASIC_UNITY_SIZE * i, BASIC_UNITY_SIZE,
                                       BASIC_UNITY_SIZE};
       SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &bodyDestinationRect, 90.0, nullptr,
                        SDL_FLIP_NONE);
@@ -82,50 +82,39 @@ void Snake::moveY(int dy) {
   else if (dy < 0)
     direction = UP;
 
-  for (size_t index = 0; index < body.size(); ++index) {
-    SDL_Rect &segment = body[index];
-    if (segment.y < 0) {
-      segment.y = 0;
-      continue;
-    }
-    if (segment.y > WINDOW_HEIGHT - BASIC_UNITY_SIZE) {
-      segment.y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
-      continue;
-    }
-
-    segment.y += dy;
+  for (size_t i = body.size() - 1; i > 0; --i) {
+    body[i].rect = body[i - 1].rect;
   }
+
+  SnakeSegment& headSegment = body[0];
+  headSegment.rect.y += dy;
+
+  if (headSegment.rect.y < 0) headSegment.rect.y = 0;
+  if (headSegment.rect.y > WINDOW_HEIGHT - BASIC_UNITY_SIZE) headSegment.rect.y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
 }
+
 void Snake::moveX(int dx) {
   if (dx > 0)
     direction = RIGHT;
   else if (dx < 0)
     direction = LEFT;
 
-  for (size_t index = 0; index < body.size(); ++index) {
-    SDL_Rect &segment = body[index];
-
-    if (index == 0) {
-      segment.x += dx;
-      continue;
-    }
-
-    if (segment.x < 0) {
-      segment.x = 0;
-    }
-    if (segment.x >= WINDOW_WIDTH - BASIC_UNITY_SIZE) {
-      segment.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
-    }
-    if (dx > 0) {
-      segment.x = body[index - 1].x - BASIC_UNITY_SIZE - SPACE_BETWEEN_BODY_PARTS;
-    }
-    if (dx < 0) {
-      segment.x = body[index - 1].x + BASIC_UNITY_SIZE + SPACE_BETWEEN_BODY_PARTS;
-    }
-
-    segment.x += dx;
+  for (size_t i = body.size() - 1; i > 0; --i) {
+    body[i].rect = body[i - 1].rect;
   }
-}
-const std::vector<SDL_Rect> &Snake::getBody() const { return body; }
 
-void Snake::increaseSize() { body.push_back({0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}); }
+  SnakeSegment& headSegment = body[0];
+  headSegment.rect.x += dx;
+
+  // Ensure head stays within the screen bounds
+  if (headSegment.rect.x < 0) headSegment.rect.x = 0;
+  if (headSegment.rect.x > WINDOW_WIDTH - BASIC_UNITY_SIZE) headSegment.rect.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
+}
+
+const std::vector<SnakeSegment>& Snake::getBody() const { return body; }
+
+void Snake::increaseSize() {
+  const SnakeSegment& tailSegment = body.back();
+  SDL_Rect newSegmentRect = {tailSegment.rect.x, tailSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+  body.push_back({newSegmentRect, tailSegment.angle});
+}

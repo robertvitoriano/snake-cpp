@@ -55,10 +55,10 @@ void Game::processInput() {
   }
 }
 void Game::handleFoodEating() {
-  std::vector<SDL_Rect> snakeBody = snake.getBody();
+  std::vector<SnakeSegment> snakeBody = snake.getBody();
 
-  for (const SDL_Rect &segment : snakeBody) {
-    if (checkCollision(food.getRect(), segment)) {
+  for (const SnakeSegment &segment : snakeBody) {
+    if (checkCollision(food.getRect(), segment.rect)) {
       snake.increaseSize();
       food.reset();
     }

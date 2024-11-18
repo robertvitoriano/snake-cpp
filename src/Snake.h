@@ -7,6 +7,10 @@
 #include <vector>
 
 enum Direction { UP, RIGHT, DOWN, LEFT };
+struct SnakeSegment {
+  SDL_Rect rect;
+  double angle;
+};
 
 class Snake {
  public:
@@ -14,11 +18,11 @@ class Snake {
   void moveY(int dy);
   void moveX(int dx);
   void increaseSize();
-  const std::vector<SDL_Rect> &getBody() const;
+  const std::vector<SnakeSegment> &getBody() const;
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
 
  private:
-  std::vector<SDL_Rect> body;
+  std::vector<SnakeSegment> body;
   void renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   Direction direction;
 };
