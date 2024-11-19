@@ -4,9 +4,15 @@
 
 Snake::Snake(int xPos, int yPos) {
   bodySourceRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+  cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+  headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+
   SDL_Rect headRect = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   body.push_back({headRect, 0});
   direction = RIGHT;
+  for (int i = 0; i <= 8; i++) {
+    increaseSize();
+  }
 }
 
 void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
@@ -19,7 +25,6 @@ void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
 }
 
 void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
-  SDL_Rect snakeHeadSrcRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   SnakeSegment& headSegment = body[0];
 
   switch (direction) {
@@ -37,7 +42,7 @@ void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetText
       break;
   }
 
-  SDL_RenderCopyEx(renderer, spritesheetTexture, &snakeHeadSrcRect, &headSegment.rect, headSegment.angle, nullptr,
+  SDL_RenderCopyEx(renderer, spritesheetTexture, &headSourceRect, &headSegment.rect, headSegment.angle, nullptr,
                    SDL_FLIP_NONE);
 }
 
@@ -58,7 +63,6 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
         currentSegment.rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE;
         break;
       case UP:
-
         currentSegment.rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE;
         break;
       case DOWN:
@@ -66,11 +70,28 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
         break;
     }
 
-    if (i == 1 && body[0].angle == 0 || body[0].angle == 180) {
-      currentSegment.angle = 90;
+    if (i == 1 && (body[0].angle == 0 || body[0].angle == 180.0)) {
+      currentSegment.angle = 90.0;
 
-    } else if (i == 1 && body[0].angle == 90 || body[0].angle == -90) {
+    } else if (i == 1 && (body[0].angle == 90.0 || body[0].angle == -90.0)) {
       currentSegment.angle = 0;
+    }
+
+    if (i != 1 && currentSegment.rect.y != prevSegment.rect.y && currentSegment.rect.x != prevSegment.rect.x &&
+        (direction == UP || direction == DOWN)) {
+      currentSegment.angle = 0;
+      SDL_Rect destinationRect = {currentSegment.rect.x, prevSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &destinationRect, currentSegment.angle, nullptr,
+                       SDL_FLIP_NONE);
+      continue;
+    }
+    if (i != 1 && currentSegment.rect.y != prevSegment.rect.y && currentSegment.rect.x != prevSegment.rect.x &&
+        (direction == RIGHT || direction == LEFT)) {
+      currentSegment.angle = 90;
+      SDL_Rect destinationRect = {currentSegment.rect.x, prevSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &destinationRect, currentSegment.angle, nullptr,
+                       SDL_FLIP_NONE);
+      continue;
     }
 
     SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &currentSegment.rect, currentSegment.angle, nullptr,

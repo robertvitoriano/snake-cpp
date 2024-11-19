@@ -24,6 +24,8 @@ class Snake {
  private:
   std::vector<SnakeSegment> body;
   SDL_Rect bodySourceRect;
+  SDL_Rect cornerSourceRect;
+  SDL_Rect headSourceRect;
   void renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void turnSnakeBodySegmentUp(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void handleBodyTurnUpAnimation(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
