@@ -52,45 +52,27 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
     SnakeSegment& currentSegment = body[i];
 
-    currentSegment.angle = prevSegment.angle;
-
     switch (direction) {
       case LEFT:
         currentSegment.rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE;
+        currentSegment.angle = 0;
+
         break;
       case RIGHT:
         currentSegment.rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE;
+        currentSegment.angle = 0;
+
         break;
       case UP:
         currentSegment.rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE;
+        currentSegment.angle = 90.0;
+
         break;
       case DOWN:
         currentSegment.rect.y = prevSegment.rect.y - BASIC_UNITY_SIZE;
+        currentSegment.angle = 90.0;
+
         break;
-    }
-
-    if (i == 1 && (direction == UP || direction == DOWN)) {
-      currentSegment.angle = 90.0;
-
-    } else if (i == 1 && (direction == LEFT || direction == RIGHT)) {
-      currentSegment.angle = 0;
-    }
-
-    if (i != 1 && currentSegment.rect.y != prevSegment.rect.y && currentSegment.rect.x != prevSegment.rect.x &&
-        (direction == UP || direction == DOWN)) {
-      currentSegment.angle = 0;
-      SDL_Rect destinationRect = {currentSegment.rect.x, currentSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &destinationRect, currentSegment.angle, nullptr,
-                       SDL_FLIP_NONE);
-      continue;
-    }
-    if (i != 1 && currentSegment.rect.y != prevSegment.rect.y && currentSegment.rect.x != prevSegment.rect.x &&
-        (direction == RIGHT || direction == LEFT)) {
-      currentSegment.angle = 90;
-      SDL_Rect destinationRect = {currentSegment.rect.x, currentSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &destinationRect, currentSegment.angle, nullptr,
-                       SDL_FLIP_NONE);
-      continue;
     }
 
     SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &currentSegment.rect, currentSegment.angle, nullptr,
