@@ -47,7 +47,6 @@ void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 }
 
 void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
-  Direction prevDirection = direction;
   for (size_t i = 1; i < body.size(); ++i) {
     const SnakeSegment& prevSegment = body[i - 1];
 
@@ -55,7 +54,7 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
     currentSegment.angle = prevSegment.angle;
 
-    switch (prevDirection) {
+    switch (direction) {
       case LEFT:
         currentSegment.rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE;
         break;
@@ -70,17 +69,17 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
         break;
     }
 
-    if (i == 1 && (body[0].angle == 0 || body[0].angle == 180.0)) {
+    if (i == 1 && (direction == UP || direction == DOWN)) {
       currentSegment.angle = 90.0;
 
-    } else if (i == 1 && (body[0].angle == 90.0 || body[0].angle == -90.0)) {
+    } else if (i == 1 && (direction == LEFT || direction == RIGHT)) {
       currentSegment.angle = 0;
     }
 
     if (i != 1 && currentSegment.rect.y != prevSegment.rect.y && currentSegment.rect.x != prevSegment.rect.x &&
         (direction == UP || direction == DOWN)) {
       currentSegment.angle = 0;
-      SDL_Rect destinationRect = {currentSegment.rect.x, prevSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+      SDL_Rect destinationRect = {currentSegment.rect.x, currentSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
       SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &destinationRect, currentSegment.angle, nullptr,
                        SDL_FLIP_NONE);
       continue;
@@ -88,7 +87,7 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
     if (i != 1 && currentSegment.rect.y != prevSegment.rect.y && currentSegment.rect.x != prevSegment.rect.x &&
         (direction == RIGHT || direction == LEFT)) {
       currentSegment.angle = 90;
-      SDL_Rect destinationRect = {currentSegment.rect.x, prevSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+      SDL_Rect destinationRect = {currentSegment.rect.x, currentSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
       SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &destinationRect, currentSegment.angle, nullptr,
                        SDL_FLIP_NONE);
       continue;
