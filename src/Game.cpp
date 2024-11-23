@@ -61,6 +61,7 @@ void Game::handleFoodEating() {
     if (checkCollision(food.getRect(), segment.rect)) {
       snake.increaseSize();
       food.reset();
+      score.updateScore();
     }
   }
 }

@@ -1,6 +1,10 @@
 #ifndef SCORE_H
 #define SCORE_H
+
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
+#include <string>
 
 #include "GameConstants.h"
 
@@ -13,5 +17,6 @@ class Score {
  private:
   SDL_Rect foodSourceRect;
   SDL_Rect rect;
+  int score;
 };
 #endif
