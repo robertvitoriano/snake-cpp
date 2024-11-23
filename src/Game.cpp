@@ -78,6 +78,7 @@ void Game::render() {
 
   snake.render(gameRenderer, spritesheetTexture);
   food.render(gameRenderer, spritesheetTexture);
+  score.render(gameRenderer, spritesheetTexture);
 
   SDL_RenderPresent(gameRenderer);
 }

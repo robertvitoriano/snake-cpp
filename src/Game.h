@@ -9,6 +9,7 @@
 #include "Food.h"
 #include "MusicPlayer.h"
 #include "Renderer.h"
+#include "Score.h"
 #include "Snake.h"
 class Game {
  public:
@@ -19,10 +20,11 @@ class Game {
  private:
   Snake snake;
   Food food;
+  Score score;
+  MusicPlayer musicPlayer;
+  Renderer renderer;
   SDL_Window *window;
   SDL_Renderer *gameRenderer;
-  Renderer renderer;
-  MusicPlayer musicPlayer;
   SDL_Texture *spritesheetTexture;
   SDL_Texture *backgroundTexture;
   bool running;
