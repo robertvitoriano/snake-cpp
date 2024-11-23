@@ -45,6 +45,25 @@ void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
 void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   for (size_t i = 1; i < body.size(); ++i) {
+    if (i == 1) {
+      SnakeSegment& prevSegment = body[0];
+      switch (direction) {
+        case LEFT:
+          body[i].rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE * 0.8;
+          break;
+        case RIGHT:
+          body[i].rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE * 0.8;
+          break;
+        case UP:
+          body[i].rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE * 0.8;
+          break;
+        case DOWN:
+          body[i].rect.y = prevSegment.rect.y - BASIC_UNITY_SIZE * 0.8;
+
+          break;
+      }
+      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
+    }
     SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
   }
 }
