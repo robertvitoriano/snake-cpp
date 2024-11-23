@@ -3,7 +3,7 @@
 #include "GameConstants.h"
 
 Snake::Snake(int xPos, int yPos) {
-  bodySourceRect = {32, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+  bodySourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 
@@ -45,29 +45,7 @@ void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
 void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   for (size_t i = 1; i < body.size(); ++i) {
-    SnakeSegment& currentSegment = body[i];
-
-    switch (direction) {
-      case LEFT:
-        currentSegment.angle = 0;
-
-        break;
-      case RIGHT:
-        currentSegment.angle = 0;
-
-        break;
-      case UP:
-        currentSegment.angle = 90.0;
-
-        break;
-      case DOWN:
-        currentSegment.angle = 90.0;
-
-        break;
-    }
-
-    SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &currentSegment.rect, currentSegment.angle, nullptr,
-                     SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
   }
 }
 
@@ -108,9 +86,7 @@ void Snake::moveX(int dx) {
 const std::vector<SnakeSegment>& Snake::getBody() const { return body; }
 
 void Snake::increaseSize() {
-  for (int i = 0; i <= 3; i++) {
-    const SnakeSegment& tailSegment = body.back();
-    SDL_Rect newSegmentRect = {tailSegment.rect.x, tailSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-    body.push_back({newSegmentRect, 0.0});
-  }
+  const SnakeSegment& tailSegment = body.back();
+  SDL_Rect newSegmentRect = {tailSegment.rect.x, tailSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+  body.push_back({newSegmentRect, 0});
 }
