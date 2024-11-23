@@ -48,28 +48,22 @@ void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
 void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   for (size_t i = 1; i < body.size(); ++i) {
-    const SnakeSegment& prevSegment = body[i - 1];
-
     SnakeSegment& currentSegment = body[i];
 
     switch (direction) {
       case LEFT:
-        currentSegment.rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE;
         currentSegment.angle = 0;
 
         break;
       case RIGHT:
-        currentSegment.rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE;
         currentSegment.angle = 0;
 
         break;
       case UP:
-        currentSegment.rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE;
         currentSegment.angle = 90.0;
 
         break;
       case DOWN:
-        currentSegment.rect.y = prevSegment.rect.y - BASIC_UNITY_SIZE;
         currentSegment.angle = 90.0;
 
         break;
