@@ -2,11 +2,11 @@
 #define SCORE_H
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
 #include <string>
 
 #include "GameConstants.h"
+#include "Renderer.h"
 
 class Score {
  public:
@@ -17,6 +17,7 @@ class Score {
  private:
   SDL_Rect foodSourceRect;
   SDL_Rect rect;
+  Renderer gameRenderer;
   int score;
 };
 #endif

@@ -9,24 +9,23 @@ Renderer::Renderer() : window(nullptr), renderer(nullptr), texture(nullptr) {
     SDL_Quit();
     throw std::runtime_error("IMG_Init Error: " + std::string(IMG_GetError()));
   }
+  if (TTF_Init() == -1) {
+    throw std::runtime_error("Failed to initialize SDL_ttf: " + std::string(TTF_GetError()));
+  }
 }
 
 SDL_Renderer *Renderer::createRenderer(std::string gameName) {
   if (!renderer) {
-    window = SDL_CreateWindow(gameName.c_str(), 100, 100, WINDOW_WIDTH,
-                              WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow(gameName.c_str(), 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window) {
       destroyRenderer();
-      throw std::runtime_error("SDL_CreateWindow Error: " +
-                               std::string(SDL_GetError()));
+      throw std::runtime_error("SDL_CreateWindow Error: " + std::string(SDL_GetError()));
     }
 
-    renderer = SDL_CreateRenderer(
-        window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer) {
       destroyRenderer();
-      throw std::runtime_error("SDL_CreateRenderer Error: " +
-                               std::string(SDL_GetError()));
+      throw std::runtime_error("SDL_CreateRenderer Error: " + std::string(SDL_GetError()));
     }
   }
 
@@ -51,11 +50,41 @@ SDL_Texture *Renderer::createTexture(std::string imagePath) {
 
   if (!texture) {
     destroyRenderer();
-    throw std::runtime_error("SDL_CreateTextureFromSurface Error: " +
-                             std::string(SDL_GetError()));
+    throw std::runtime_error("SDL_CreateTextureFromSurface Error: " + std::string(SDL_GetError()));
   }
 
   return texture;
+}
+
+void Renderer::drawText(std::string text, SDL_Color color, Position position, SDL_Renderer *renderer) {
+  TTF_Font *font = TTF_OpenFont("assets/fonts/BigBlueTermPlusNerdFontPropo-Regular.ttf", 24);
+  if (!font) {
+    SDL_Log("Failed to load font: %s", TTF_GetError());
+    return;
+  }
+
+  SDL_Surface *textSurface = TTF_RenderText_Blended(font, text.c_str(), color);
+  if (!textSurface) {
+    SDL_Log("Failed to create text surface: %s", TTF_GetError());
+    TTF_CloseFont(font);
+    return;
+  }
+
+  SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+  SDL_FreeSurface(textSurface);
+
+  if (!textTexture) {
+    SDL_Log("Failed to create text texture: %s", SDL_GetError());
+    TTF_CloseFont(font);
+    return;
+  }
+
+  SDL_Rect textRect = {position.x, position.y, textSurface->w, textSurface->h};
+
+  SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+
+  SDL_DestroyTexture(textTexture);
+  TTF_CloseFont(font);
 }
 void Renderer::destroyRenderer() {
   if (renderer) {
