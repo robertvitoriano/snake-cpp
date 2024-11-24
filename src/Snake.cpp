@@ -27,11 +27,11 @@ bool Snake::hasLost() {
 
     return true;
   }
-  if (collidedWithBody) {
-    std::cout << "SNAKE HAS TOUCHED BODY" << std::endl;
+  // if (collidedWithBody) {
+  //   std::cout << "SNAKE HAS TOUCHED BODY" << std::endl;
 
-    return true;
-  }
+  //   return true;
+  // }
   return false;
 }
 
@@ -87,13 +87,6 @@ void Snake::moveY(int dy) {
   else if (dy < 0)
     direction = UP;
 
-  for (size_t i = body.size() - 1; i > 0; --i) {
-    body[i].rect = body[i - 1].rect;
-    if (body[0].rect.y == body[i].rect.y) {
-      // collidedWithBody = true;
-    }
-  }
-
   SnakeSegment& headSegment = body[0];
   headSegment.rect.y += dy;
 
@@ -105,6 +98,14 @@ void Snake::moveY(int dy) {
     headSegment.rect.y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
     collidedWithWall = true;
   }
+
+  SDL_Rect mouthRect = getMouthRect(headSegment.rect, direction);
+  for (size_t i = 1; i < body.size(); ++i) {
+    body[i].rect = body[i - 1].rect;
+    if (checkCollision(mouthRect, body[i].rect)) {
+      collidedWithBody = true;
+    }
+  }
 }
 
 void Snake::moveX(int dx) {
@@ -112,13 +113,6 @@ void Snake::moveX(int dx) {
     direction = RIGHT;
   else if (dx < 0)
     direction = LEFT;
-
-  for (size_t i = body.size() - 1; i > 0; --i) {
-    body[i].rect = body[i - 1].rect;
-    if (body[0].rect.x + body[0].rect.w == body[i].rect.x) {
-      // collidedWithBody = true;
-    }
-  }
 
   SnakeSegment& headSegment = body[0];
   headSegment.rect.x += dx;
@@ -130,6 +124,13 @@ void Snake::moveX(int dx) {
   if (headSegment.rect.x > WINDOW_WIDTH - BASIC_UNITY_SIZE) {
     headSegment.rect.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
     collidedWithWall = true;
+  }
+  SDL_Rect mouthRect = getMouthRect(headSegment.rect, direction);
+  for (size_t i = 1; i < body.size(); ++i) {
+    body[i].rect = body[i - 1].rect;
+    if (checkCollision(mouthRect, body[i].rect)) {
+      collidedWithBody = true;
+    }
   }
 }
 
@@ -158,4 +159,30 @@ void Snake::increaseSize() {
     SDL_Rect newSegmentRect = {tailSegment.rect.x, tailSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
     body.push_back({newSegmentRect, 0});
   }
+}
+
+bool Snake::checkCollision(const SDL_Rect& a, const SDL_Rect& b) {
+  return (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y);
+}
+
+SDL_Rect Snake::getMouthRect(const SDL_Rect& headRect, Direction direction) {
+  const int MOUTH_SIZE = BASIC_UNITY_SIZE / 4;
+  SDL_Rect mouth;
+
+  switch (direction) {
+    case RIGHT:
+      mouth = {headRect.x + headRect.w - MOUTH_SIZE, headRect.y + headRect.h / 4, MOUTH_SIZE, MOUTH_SIZE};
+      break;
+    case LEFT:
+      mouth = {headRect.x, headRect.y + headRect.h / 4, MOUTH_SIZE, MOUTH_SIZE};
+      break;
+    case UP:
+      mouth = {headRect.x + headRect.w / 4, headRect.y, MOUTH_SIZE, MOUTH_SIZE};
+      break;
+    case DOWN:
+      mouth = {headRect.x + headRect.w / 4, headRect.y + headRect.h - MOUTH_SIZE, MOUTH_SIZE, MOUTH_SIZE};
+      break;
+  }
+
+  return mouth;
 }

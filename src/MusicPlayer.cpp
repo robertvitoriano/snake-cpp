@@ -19,7 +19,7 @@ void MusicPlayer::play(std::string musicPath) {
   if (Mix_PlayMusic(backgroundMusic, -1) == -1) {
     throw std::runtime_error("Failed to play background music! Error: " + std::string(Mix_GetError()));
   }
-  Mix_VolumeMusic(30);
+  Mix_VolumeMusic(0);
 }
 
 void MusicPlayer::setVolume(int volume) {
