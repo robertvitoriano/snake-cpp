@@ -15,8 +15,7 @@ struct SnakeSegment {
 class Snake {
  public:
   Snake(int xPos, int yPos);
-  void moveY(int dy);
-  void moveX(int dx);
+  void handleMovements();
   void increaseSize();
   const std::vector<SnakeSegment> &getBody() const;
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
@@ -27,6 +26,8 @@ class Snake {
   void turnSnakeBodySegmentUp(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void handleBodyTurnUpAnimation(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void renderSnakeHead(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
+  void moveY(int dy);
+  void moveX(int dx);
   std::vector<SnakeSegment> body;
   SDL_Rect bodySourceRect;
   SDL_Rect cornerSourceRect;

@@ -134,6 +134,23 @@ void Snake::moveX(int dx) {
   }
 }
 
+void Snake::handleMovements() {
+  const Uint8* keyboardState = SDL_GetKeyboardState(nullptr);
+
+  if (keyboardState[SDL_SCANCODE_UP]) {
+    moveY(-SNAKE_SPEED);
+  }
+  if (keyboardState[SDL_SCANCODE_DOWN]) {
+    moveY(SNAKE_SPEED);
+  }
+  if (keyboardState[SDL_SCANCODE_RIGHT]) {
+    moveX(SNAKE_SPEED);
+  }
+  if (keyboardState[SDL_SCANCODE_LEFT]) {
+    moveX(-SNAKE_SPEED);
+  }
+}
+
 const std::vector<SnakeSegment>& Snake::getBody() const { return body; }
 
 void Snake::increaseSize() {

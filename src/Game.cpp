@@ -37,21 +37,7 @@ void Game::processInput() {
       running = false;
     }
   }
-
-  const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
-
-  if (keyboardState[SDL_SCANCODE_UP]) {
-    snake.moveY(-SNAKE_SPEED);
-  }
-  if (keyboardState[SDL_SCANCODE_DOWN]) {
-    snake.moveY(SNAKE_SPEED);
-  }
-  if (keyboardState[SDL_SCANCODE_RIGHT]) {
-    snake.moveX(SNAKE_SPEED);
-  }
-  if (keyboardState[SDL_SCANCODE_LEFT]) {
-    snake.moveX(-SNAKE_SPEED);
-  }
+  snake.handleMovements();
 }
 void Game::handleFoodEating() {
   std::vector<SnakeSegment> snakeBody = snake.getBody();
@@ -61,7 +47,6 @@ void Game::handleFoodEating() {
       snake.increaseSize();
       food.reset();
       score.updateScore();
-      backgroundTexture = renderer.createTexture("assets/images/background-2.png");
     }
   }
 }
