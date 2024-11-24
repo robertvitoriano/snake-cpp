@@ -68,6 +68,8 @@ void Game::handleFoodEating() {
 void Game::update() {
   handleFoodEating();
   processInput();
+  if (snake.hasLost()) {
+  }
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);

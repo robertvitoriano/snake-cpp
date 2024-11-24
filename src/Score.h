@@ -13,6 +13,7 @@ class Score {
   Score();
   void updateScore();
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
+  bool hasLost();
 
  private:
   SDL_Rect foodSourceRect;

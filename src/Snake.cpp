@@ -2,7 +2,7 @@
 
 #include "GameConstants.h"
 
-Snake::Snake(int xPos, int yPos) {
+Snake::Snake(int xPos, int yPos) : collidedWithBody(false), collidedWithWall(false) {
   bodySourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
@@ -19,6 +19,20 @@ void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   }
   renderSnakeHead(renderer, spritesheetTexture);
   renderSnakeBody(renderer, spritesheetTexture);
+}
+
+bool Snake::hasLost() {
+  if (collidedWithWall) {
+    std::cout << "SNAKE HAS TOUCHED WALL" << std::endl;
+
+    return true;
+  }
+  if (collidedWithBody) {
+    std::cout << "SNAKE HAS TOUCHED BODY" << std::endl;
+
+    return true;
+  }
+  return false;
 }
 
 void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
@@ -76,13 +90,22 @@ void Snake::moveY(int dy) {
 
   for (size_t i = body.size() - 1; i > 0; --i) {
     body[i].rect = body[i - 1].rect;
+    if (body[0].rect.y == body[i].rect.y) {
+      collidedWithBody = true;
+    }
   }
 
   SnakeSegment& headSegment = body[0];
   headSegment.rect.y += dy;
 
-  if (headSegment.rect.y < 0) headSegment.rect.y = 0;
-  if (headSegment.rect.y > WINDOW_HEIGHT - BASIC_UNITY_SIZE) headSegment.rect.y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
+  if (headSegment.rect.y < 0) {
+    headSegment.rect.y = 0;
+    collidedWithWall = true;
+  }
+  if (headSegment.rect.y > WINDOW_HEIGHT - BASIC_UNITY_SIZE) {
+    headSegment.rect.y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
+    collidedWithWall = true;
+  }
 }
 
 void Snake::moveX(int dx) {
@@ -93,13 +116,22 @@ void Snake::moveX(int dx) {
 
   for (size_t i = body.size() - 1; i > 0; --i) {
     body[i].rect = body[i - 1].rect;
+    if (body[0].rect.x + body[0].rect.w == body[i].rect.x) {
+      collidedWithBody = true;
+    }
   }
 
   SnakeSegment& headSegment = body[0];
   headSegment.rect.x += dx;
 
-  if (headSegment.rect.x < 0) headSegment.rect.x = 0;
-  if (headSegment.rect.x > WINDOW_WIDTH - BASIC_UNITY_SIZE) headSegment.rect.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
+  if (headSegment.rect.x < 0) {
+    headSegment.rect.x = 0;
+    collidedWithWall = true;
+  }
+  if (headSegment.rect.x > WINDOW_WIDTH - BASIC_UNITY_SIZE) {
+    headSegment.rect.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
+    collidedWithWall = true;
+  }
 }
 
 const std::vector<SnakeSegment>& Snake::getBody() const { return body; }
