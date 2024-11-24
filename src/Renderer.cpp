@@ -79,7 +79,8 @@ void Renderer::drawText(std::string text, SDL_Color color, Position position, SD
     return;
   }
 
-  SDL_Rect textRect = {position.x, position.y, textSurface->w, textSurface->h};
+  SDL_Rect textRect = {position.x - textSurface->w / 2, position.y - textSurface->h / 2, textSurface->w,
+                       textSurface->h};
 
   SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
 

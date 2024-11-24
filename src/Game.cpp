@@ -2,7 +2,7 @@
 
 #include "GameConstants.h"
 
-Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true) {
+Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true), gameOver(false) {
   gameRenderer = renderer.createRenderer("Snake Game");
   spritesheetTexture = renderer.createTexture("assets/images/spritesheet.png");
 
@@ -69,20 +69,27 @@ void Game::update() {
   handleFoodEating();
   processInput();
   if (snake.hasLost()) {
+    gameOver = true;
   }
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);
+  if (!gameOver) {
+    SDL_Rect backgroundRectSrc = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+    SDL_Rect backgroundRectDest = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
-  SDL_Rect backgroundRectSrc = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
-  SDL_Rect backgroundRectDest = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+    SDL_RenderCopy(gameRenderer, backgroundTexture, &backgroundRectSrc, &backgroundRectDest);
 
-  SDL_RenderCopy(gameRenderer, backgroundTexture, &backgroundRectSrc, &backgroundRectDest);
+    snake.render(gameRenderer, spritesheetTexture);
+    food.render(gameRenderer, spritesheetTexture);
+    score.render(gameRenderer, spritesheetTexture);
 
-  snake.render(gameRenderer, spritesheetTexture);
-  food.render(gameRenderer, spritesheetTexture);
-  score.render(gameRenderer, spritesheetTexture);
-
+  } else {
+    SDL_Color textColor = {255, 255, 255};
+    Position postion = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
+    renderer.drawText("Game over!", textColor, postion, gameRenderer);
+    SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
+  }
   SDL_RenderPresent(gameRenderer);
 }
 

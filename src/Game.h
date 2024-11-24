@@ -28,6 +28,7 @@ class Game {
   SDL_Texture *spritesheetTexture;
   SDL_Texture *backgroundTexture;
   bool running;
+  bool gameOver;
   void processInput();
   void handleFoodEating();
   void update();
