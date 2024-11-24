@@ -4,16 +4,16 @@
 
 Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true) {
   gameRenderer = renderer.createRenderer("Snake Game");
-  spritesheetTexture = renderer.createTexture("assets/spritesheet.png");
+  spritesheetTexture = renderer.createTexture("assets/images/spritesheet.png");
 
   if (!spritesheetTexture) {
     renderer.destroyRenderer();
     throw std::runtime_error("Failed to load spritesheet texture");
   }
 
-  backgroundTexture = renderer.createTexture("assets/background.png");
+  backgroundTexture = renderer.createTexture("assets/images/background.png");
 
-  musicPlayer.play("assets/background.mp3");
+  musicPlayer.play("assets/sounds/background.mp3");
 }
 
 Game::~Game() {
@@ -61,6 +61,7 @@ void Game::handleFoodEating() {
       snake.increaseSize();
       food.reset();
       score.updateScore();
+      backgroundTexture = renderer.createTexture("assets/images/background-2.png");
     }
   }
 }
