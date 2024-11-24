@@ -11,9 +11,8 @@ Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true
     throw std::runtime_error("Failed to load spritesheet texture");
   }
 
-  SDL_Surface *backgroundSurface = IMG_Load("assets/background.png");
-  backgroundTexture = SDL_CreateTextureFromSurface(gameRenderer, backgroundSurface);
-  SDL_FreeSurface(backgroundSurface);
+  backgroundTexture = renderer.createTexture("assets/background.png");
+
   musicPlayer.play("assets/background.mp3");
 }
 

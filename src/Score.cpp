@@ -14,5 +14,6 @@ void Score::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture) {
   std::string scoreText = "x " + std::to_string(score);
   SDL_Color textColor = {255, 255, 255};
   Position textPostion = {rect.x + 10, rect.y};
+
   gameRenderer.drawText(scoreText, textColor, textPostion, renderer);
 }
