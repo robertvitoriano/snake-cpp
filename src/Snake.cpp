@@ -76,7 +76,6 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
           break;
       }
-      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
     }
     SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
   }
@@ -91,7 +90,7 @@ void Snake::moveY(int dy) {
   for (size_t i = body.size() - 1; i > 0; --i) {
     body[i].rect = body[i - 1].rect;
     if (body[0].rect.y == body[i].rect.y) {
-      collidedWithBody = true;
+      // collidedWithBody = true;
     }
   }
 
@@ -117,7 +116,7 @@ void Snake::moveX(int dx) {
   for (size_t i = body.size() - 1; i > 0; --i) {
     body[i].rect = body[i - 1].rect;
     if (body[0].rect.x + body[0].rect.w == body[i].rect.x) {
-      collidedWithBody = true;
+      // collidedWithBody = true;
     }
   }
 
