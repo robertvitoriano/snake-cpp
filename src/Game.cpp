@@ -56,6 +56,16 @@ void Game::update() {
   if (snake.hasLost()) {
     gameOver = true;
   }
+  const std::vector<SnakeSegment> &snakeBody = snake.getBody();
+  if (snakeBody.size() > 20) {
+    for (int i = 10; i < snakeBody.size(); i++) {
+      if (snakeBody[i].rect.x != snakeBody[0].rect.x && snakeBody[i].rect.y != snakeBody[0].rect.y) {
+        if (checkCollision(snakeBody[i].rect, snakeBody[0].rect)) {
+          gameOver = true;
+        }
+      }
+    }
+  }
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);

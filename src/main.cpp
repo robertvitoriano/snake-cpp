@@ -1,5 +1,6 @@
-#include "Game.h"
 #include <iostream>
+
+#include "Game.h"
 
 int main() {
   try {
