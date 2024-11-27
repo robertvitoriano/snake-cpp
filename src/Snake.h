@@ -15,8 +15,9 @@ struct SnakeSegment {
 class Snake {
  public:
   Snake(int xPos, int yPos);
-  void increaseSize();
   const std::vector<SnakeSegment> &getBody() const;
+  int getCurrentLives();
+  void increaseSize();
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void handleHit();
   void update();
@@ -32,6 +33,7 @@ class Snake {
   void checkCollision(const SDL_Rect &a, const SDL_Rect &b);
   void moveY(int dy);
   void moveX(int dx);
+  void handleHeadBodyHit();
   std::vector<SnakeSegment> body;
   SDL_Rect bodySourceRect;
   SDL_Rect cornerSourceRect;

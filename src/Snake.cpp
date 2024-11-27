@@ -26,12 +26,28 @@ void Snake::update() {
   checkForCollision();
 }
 
+void Snake::handleHeadBodyHit() {
+  if (body.size() > 20) {
+    for (int i = 10; i < body.size(); i++) {
+      if (body[i].rect.x != body[0].rect.x && body[i].rect.y != body[0].rect.y) {
+        if (SDL_HasIntersection(&body[i].rect, &body[0].rect)) {
+          handleHit();
+        }
+      }
+    }
+  }
+}
+
+int Snake::getCurrentLives() { return lives; }
+
 void Snake::checkForCollision() {
   if (collidedWithWall) {
     handleHit();
+    collidedWithWall = false;
   }
   if (collidedWithBody) {
     handleHit();
+    collidedWithBody = false;
   }
 }
 
