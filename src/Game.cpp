@@ -37,7 +37,7 @@ void Game::processInput() {
       running = false;
     }
   }
-  snake.handleMovements();
+  snake.update();
 }
 void Game::handleFoodEating() {
   std::vector<SnakeSegment> snakeBody = snake.getBody();
@@ -53,9 +53,7 @@ void Game::handleFoodEating() {
 void Game::update() {
   handleFoodEating();
   processInput();
-  if (snake.hasLost()) {
-    gameOver = true;
-  }
+  snake.update();
   const std::vector<SnakeSegment> &snakeBody = snake.getBody();
   if (snakeBody.size() > 20) {
     for (int i = 10; i < snakeBody.size(); i++) {

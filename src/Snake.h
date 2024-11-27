@@ -15,19 +15,21 @@ struct SnakeSegment {
 class Snake {
  public:
   Snake(int xPos, int yPos);
-  void handleMovements();
   void increaseSize();
   const std::vector<SnakeSegment> &getBody() const;
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
-  bool hasLost();
+  void handleHit();
+  void update();
 
  private:
+  void handleMovements();
+  void checkForCollision();
   void renderSnakeBody(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void turnSnakeBodySegmentUp(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void handleBodyTurnUpAnimation(int snakeBodyIndex, SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void renderSnakeHead(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   SDL_Rect getMouthRect(const SDL_Rect &headRect, Direction direction);
-  bool checkCollision(const SDL_Rect &a, const SDL_Rect &b);
+  void checkCollision(const SDL_Rect &a, const SDL_Rect &b);
   void moveY(int dy);
   void moveX(int dx);
   std::vector<SnakeSegment> body;
@@ -37,6 +39,7 @@ class Snake {
   Direction direction;
   bool collidedWithWall;
   bool collidedWithBody;
+  int lives;
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 #include "GameConstants.h"
 
-Snake::Snake(int xPos, int yPos) : collidedWithBody(false), collidedWithWall(false) {
+Snake::Snake(int xPos, int yPos) : collidedWithBody(false), collidedWithWall(false), lives(5) {
   bodySourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
@@ -21,16 +21,18 @@ void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   renderSnakeBody(renderer, spritesheetTexture);
 }
 
-bool Snake::hasLost() {
+void Snake::update() {
+  handleMovements();
+  checkForCollision();
+}
+
+void Snake::checkForCollision() {
   if (collidedWithWall) {
-    return true;
+    handleHit();
   }
   if (collidedWithBody) {
-    std::cout << "SNAKE HAS TOUCHED BODY" << std::endl;
-
-    return true;
+    handleHit();
   }
-  return false;
 }
 
 void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
@@ -155,3 +157,5 @@ void Snake::increaseSize() {
     body.push_back({newSegmentRect, 0});
   }
 }
+
+void Snake::handleHit() { lives--; }
