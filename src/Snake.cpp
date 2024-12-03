@@ -3,7 +3,7 @@
 #include "GameConstants.h"
 
 Snake::Snake(int xPos, int yPos)
-    : collidedWithBody(false), collidedWithWall(false), lives(5), hitTimer(false), hitInterval(5000) {
+    : collidedWithBody(false), collidedWithWall(false), lives(5), hitTimer(0), hitInterval(5000) {
   bodySourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
@@ -23,21 +23,19 @@ void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   }
   renderSnakeHead(renderer, spritesheetTexture);
   renderSnakeBody(renderer, spritesheetTexture);
-  std::cout << "LIVES: " << lives << std::endl;
 }
 
 void Snake::update() {
   handleMovements();
   checkForCollision();
+  handleHeadBodyHit();
 }
 
 void Snake::handleHeadBodyHit() {
   if (body.size() > 20) {
     for (int i = 10; i < body.size(); i++) {
-      if (body[i].rect.x != body[0].rect.x && body[i].rect.y != body[0].rect.y) {
-        if (SDL_HasIntersection(&body[i].rect, &body[0].rect)) {
-          handleHit();
-        }
+      if (SDL_HasIntersection(&body[i].rect, &body[0].rect)) {
+        handleHit();
       }
     }
   }
@@ -111,9 +109,6 @@ void Snake::moveY(int dy) {
 
   for (size_t i = body.size() - 1; i > 0; --i) {
     body[i].rect = body[i - 1].rect;
-    if (body[0].rect.x == body[i].rect.x + body[i].rect.w && body[0].rect.y == body[i].rect.y) {
-      std::cout << "collided with body from the left" << std::endl;
-    }
   }
 
   SnakeSegment& headSegment = body[0];
@@ -180,13 +175,8 @@ void Snake::increaseSize() {
 }
 
 void Snake::handleHit() {
-  wasHit = true;
-  uint32_t now = SDL_GetTicks();
-
-  if (now > hitTimer && wasHit) {
-    wasHit = false;
+  if (SDL_GetTicks() > hitTimer + hitInterval) {
     lives--;
-
     hitTimer = SDL_GetTicks();
   }
 }

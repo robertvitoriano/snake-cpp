@@ -57,7 +57,7 @@ void Game::update() {
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);
-  if (!gameOver) {
+  if (snake.getCurrentLives() > 0) {
     SDL_Rect backgroundRectSrc = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
     SDL_Rect backgroundRectDest = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
@@ -67,6 +67,10 @@ void Game::render() {
     food.render(gameRenderer, spritesheetTexture);
     score.render(gameRenderer, spritesheetTexture);
 
+    SDL_Color textColor = {255, 255, 255};
+    Position postion = {WINDOW_WIDTH - 40, 20};
+
+    renderer.drawText(std::to_string(snake.getCurrentLives()), textColor, postion, gameRenderer);
   } else {
     SDL_Color textColor = {255, 255, 255};
     Position postion = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
