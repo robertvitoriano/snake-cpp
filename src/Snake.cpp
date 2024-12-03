@@ -2,13 +2,17 @@
 
 #include "GameConstants.h"
 
-Snake::Snake(int xPos, int yPos) : collidedWithBody(false), collidedWithWall(false), lives(5) {
+Snake::Snake(int xPos, int yPos)
+    : collidedWithBody(false), collidedWithWall(false), lives(5), hitTimer(false), hitInterval(5000) {
   bodySourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 
   SDL_Rect headRect = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   body.push_back({headRect, 0});
+  for (int i = 0; i < 3; i++) {
+    increaseSize();
+  }
   direction = RIGHT;
 }
 
@@ -19,6 +23,7 @@ void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   }
   renderSnakeHead(renderer, spritesheetTexture);
   renderSnakeBody(renderer, spritesheetTexture);
+  std::cout << "LIVES: " << lives << std::endl;
 }
 
 void Snake::update() {
@@ -174,4 +179,14 @@ void Snake::increaseSize() {
   }
 }
 
-void Snake::handleHit() { lives--; }
+void Snake::handleHit() {
+  wasHit = true;
+  uint32_t now = SDL_GetTicks();
+
+  if (now > hitTimer && wasHit) {
+    wasHit = false;
+    lives--;
+
+    hitTimer = SDL_GetTicks();
+  }
+}
