@@ -9,8 +9,8 @@
 #include "Food.h"
 #include "MusicPlayer.h"
 #include "Renderer.h"
-#include "Score.h"
 #include "Snake.h"
+#include "UI.h"
 class Game {
  public:
   Game();
@@ -20,12 +20,13 @@ class Game {
  private:
   Snake snake;
   Food food;
-  Score score;
+  UI ui;
   MusicPlayer musicPlayer;
   Renderer renderer;
   SDL_Window *window;
   SDL_Renderer *gameRenderer;
   SDL_Texture *spritesheetTexture;
+  SDL_Texture *heartTexture;
   SDL_Texture *backgroundTexture;
   bool running;
   bool gameOver;

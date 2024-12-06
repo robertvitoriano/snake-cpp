@@ -5,7 +5,7 @@
 Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true), gameOver(false) {
   gameRenderer = renderer.createRenderer("Snake Game");
   spritesheetTexture = renderer.createTexture("assets/images/spritesheet.png");
-
+  heartTexture = renderer.createTexture("assets/images/heart.png");
   if (!spritesheetTexture) {
     renderer.destroyRenderer();
     throw std::runtime_error("Failed to load spritesheet texture");
@@ -46,7 +46,7 @@ void Game::handleFoodEating() {
     if (checkCollision(food.getRect(), segment.rect)) {
       snake.increaseSize();
       food.reset();
-      score.updateScore();
+      ui.updateScore();
     }
   }
 }
@@ -54,6 +54,7 @@ void Game::update() {
   handleFoodEating();
   processInput();
   snake.update();
+  ui.setLives(snake.getCurrentLives());
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);
@@ -65,12 +66,11 @@ void Game::render() {
 
     snake.render(gameRenderer, spritesheetTexture);
     food.render(gameRenderer, spritesheetTexture);
-    score.render(gameRenderer, spritesheetTexture);
+    ui.render(gameRenderer, spritesheetTexture, heartTexture);
 
     SDL_Color textColor = {255, 255, 255};
     Position postion = {WINDOW_WIDTH - 40, 20};
 
-    renderer.drawText(std::to_string(snake.getCurrentLives()), textColor, postion, gameRenderer);
   } else {
     SDL_Color textColor = {255, 255, 255};
     Position postion = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
