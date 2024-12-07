@@ -11,8 +11,8 @@ class MusicPlayer {
  public:
   static MusicPlayer& getInstance();
 
-  void playMusic(const std::string& musicPath, int loops = 0);
-  void playSound(const std::string& soundPath, int loops = 0);
+  void playMusic(const std::string& musicPath, int loops);
+  void playSound(const std::string& soundPath, int loops);
   void setVolume(int volume);
   void destroy();
 

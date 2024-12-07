@@ -181,5 +181,8 @@ void Snake::handleHit() {
   if (SDL_GetTicks() > hitTimer + hitInterval) {
     lives--;
     hitTimer = SDL_GetTicks();
+
+    MusicPlayer& musicPlayer = MusicPlayer::getInstance();
+    musicPlayer.playSound("assets/sounds/sx/hit.wav", 0);
   }
 }

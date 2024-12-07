@@ -13,7 +13,7 @@ Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true
 
   backgroundTexture = renderer.createTexture("assets/images/background.png");
   MusicPlayer &musicPlayer = MusicPlayer::getInstance();
-  musicPlayer.playMusic("assets/sounds/background.mp3");
+  musicPlayer.playMusic("assets/sounds/background.mp3", -1);
 }
 
 Game::~Game() {
