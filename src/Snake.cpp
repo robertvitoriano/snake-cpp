@@ -7,7 +7,7 @@ Snake::Snake(int xPos, int yPos)
       collidedWithWall(false),
       lives(5),
       hitTimer(0),
-      hitInterval(5000),
+      hitInterval(2000),
       isBlinking(false),
       blinkStartTime(0),
       blinkDuration(2000),
