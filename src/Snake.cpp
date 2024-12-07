@@ -11,43 +11,42 @@ Snake::Snake(int xPos, int yPos)
       isBlinking(false),
       blinkStartTime(0),
       blinkDuration(2000),
-      blinkInterval(200) {
-  bodySourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-  cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-  headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-
-  SDL_Rect headRect = {xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
-  body.push_back({headRect, 0});
+      blinkInterval(200),
+      direction(RIGHT),
+      bodySourceRect({64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
+      cornerSourceRect({64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
+      headSourceRect({32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
+      body{{{xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}, 0}} {
   for (int i = 0; i < 3; i++) {
-    increaseSize();
+    this->increaseSize();
   }
-  direction = RIGHT;
+  this->direction = RIGHT;
 }
 
 void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
-  if (body.empty()) {
+  if (this->body.empty()) {
     std::cerr << "Body is empty!" << std::endl;
     return;
   }
-  if (isBlinking) {
-    renderBlinkingSnake(renderer, spritesheetTexture);
+  if (this->isBlinking) {
+    this->renderBlinkingSnake(renderer, spritesheetTexture);
   } else {
-    renderSnakeHead(renderer, spritesheetTexture);
-    renderSnakeBody(renderer, spritesheetTexture);
+    this->renderSnakeHead(renderer, spritesheetTexture);
+    this->renderSnakeBody(renderer, spritesheetTexture);
   }
 }
 
 void Snake::update() {
-  handleMovements();
-  checkForCollision();
-  handleHeadBodyHit();
+  this->handleMovements();
+  this->checkForCollision();
+  this->handleHeadBodyHit();
 }
 
 void Snake::handleHeadBodyHit() {
-  if (body.size() > 20) {
+  if (this->body.size() > 20) {
     for (int i = 10; i < body.size(); i++) {
       if (SDL_HasIntersection(&body[i].rect, &body[0].rect)) {
-        handleHit();
+        this->handleHit();
       }
     }
   }
@@ -56,20 +55,20 @@ void Snake::handleHeadBodyHit() {
 int Snake::getCurrentLives() { return lives; }
 
 void Snake::checkForCollision() {
-  if (collidedWithWall) {
-    handleHit();
-    collidedWithWall = false;
+  if (this->collidedWithWall) {
+    this->handleHit();
+    this->collidedWithWall = false;
   }
-  if (collidedWithBody) {
-    handleHit();
-    collidedWithBody = false;
+  if (this->collidedWithBody) {
+    this->handleHit();
+    this->collidedWithBody = false;
   }
 }
 
 void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
-  SnakeSegment& headSegment = body[0];
+  SnakeSegment& headSegment = this->body[0];
 
-  switch (direction) {
+  switch (this->direction) {
     case RIGHT:
       headSegment.angle = 90.0;
       break;
@@ -89,21 +88,21 @@ void Snake::renderSnakeHead(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 }
 
 void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
-  for (size_t i = 1; i < body.size(); ++i) {
+  for (size_t i = 1; i < this->body.size(); ++i) {
     if (i == 1) {
-      SnakeSegment& prevSegment = body[0];
+      SnakeSegment& prevSegment = this->body[0];
       switch (direction) {
         case LEFT:
-          body[i].rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE * 0.8;
           break;
         case RIGHT:
-          body[i].rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE * 0.8;
           break;
         case UP:
-          body[i].rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE * 0.8;
           break;
         case DOWN:
-          body[i].rect.y = prevSegment.rect.y - BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.y = prevSegment.rect.y - BASIC_UNITY_SIZE * 0.8;
 
           break;
       }
@@ -115,7 +114,7 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
 void Snake::renderBlinkingSnake(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
   Uint32 currentTime = SDL_GetTicks();
-  if ((currentTime - blinkStartTime) / blinkInterval % 2 == 0) {
+  if ((currentTime - this->blinkStartTime) / this->blinkInterval % 2 == 0) {
     renderSnakeHead(renderer, spritesheetTexture);
     renderSnakeBody(renderer, spritesheetTexture);
   } else {
@@ -126,41 +125,41 @@ void Snake::renderBlinkingSnake(SDL_Renderer* renderer, SDL_Texture* spritesheet
   }
 
   if (currentTime > blinkStartTime + blinkDuration) {
-    isBlinking = false;
+    this->isBlinking = false;
   }
 }
 
 void Snake::moveY(int dy) {
   if (dy > 0)
-    direction = DOWN;
+    this->direction = DOWN;
   else if (dy < 0)
-    direction = UP;
+    this->direction = UP;
 
-  for (size_t i = body.size() - 1; i > 0; --i) {
-    body[i].rect = body[i - 1].rect;
+  for (size_t i = this->body.size() - 1; i > 0; --i) {
+    this->body[i].rect = this->body[i - 1].rect;
   }
 
-  SnakeSegment& headSegment = body[0];
+  SnakeSegment& headSegment = this->body[0];
   headSegment.rect.y += dy;
 
   if (headSegment.rect.y < 0) {
     headSegment.rect.y = 0;
-    collidedWithWall = true;
+    this->collidedWithWall = true;
   }
   if (headSegment.rect.y > WINDOW_HEIGHT - BASIC_UNITY_SIZE) {
     headSegment.rect.y = WINDOW_HEIGHT - BASIC_UNITY_SIZE;
-    collidedWithWall = true;
+    this->collidedWithWall = true;
   }
 }
 
 void Snake::moveX(int dx) {
   if (dx > 0)
-    direction = RIGHT;
+    this->direction = RIGHT;
   else if (dx < 0)
-    direction = LEFT;
+    this->direction = LEFT;
 
-  for (size_t i = body.size() - 1; i > 0; --i) {
-    body[i].rect = body[i - 1].rect;
+  for (size_t i = this->body.size() - 1; i > 0; --i) {
+    this->body[i].rect = this->body[i - 1].rect;
   }
 
   SnakeSegment& headSegment = body[0];
@@ -168,11 +167,11 @@ void Snake::moveX(int dx) {
 
   if (headSegment.rect.x < 0) {
     headSegment.rect.x = 0;
-    collidedWithWall = true;
+    this->collidedWithWall = true;
   }
   if (headSegment.rect.x > WINDOW_WIDTH - BASIC_UNITY_SIZE) {
     headSegment.rect.x = WINDOW_WIDTH - BASIC_UNITY_SIZE;
-    collidedWithWall = true;
+    this->collidedWithWall = true;
   }
 }
 
@@ -180,16 +179,16 @@ void Snake::handleMovements() {
   const Uint8* keyboardState = SDL_GetKeyboardState(nullptr);
 
   if (keyboardState[SDL_SCANCODE_UP]) {
-    moveY(-SNAKE_SPEED);
+    this->moveY(-SNAKE_SPEED);
   }
   if (keyboardState[SDL_SCANCODE_DOWN]) {
-    moveY(SNAKE_SPEED);
+    this->moveY(SNAKE_SPEED);
   }
   if (keyboardState[SDL_SCANCODE_RIGHT]) {
-    moveX(SNAKE_SPEED);
+    this->moveX(SNAKE_SPEED);
   }
   if (keyboardState[SDL_SCANCODE_LEFT]) {
-    moveX(-SNAKE_SPEED);
+    this->moveX(-SNAKE_SPEED);
   }
 }
 
@@ -207,14 +206,14 @@ void Snake::increaseSize() {
 }
 
 void Snake::handleHit() {
-  if (SDL_GetTicks() > hitTimer + hitInterval) {
-    lives--;
-    hitTimer = SDL_GetTicks();
+  if (SDL_GetTicks() > this->hitTimer + this->hitInterval) {
+    this->lives--;
+    this->hitTimer = SDL_GetTicks();
 
     MusicPlayer& musicPlayer = MusicPlayer::getInstance();
     musicPlayer.playSound("assets/sounds/sx/hit.wav", 0);
 
-    isBlinking = true;
-    blinkStartTime = SDL_GetTicks();
+    this->isBlinking = true;
+    this->blinkStartTime = SDL_GetTicks();
   }
 }
