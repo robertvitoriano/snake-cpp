@@ -7,7 +7,7 @@ MusicPlayer& MusicPlayer::getInstance() {
   return instance;
 }
 
-MusicPlayer::MusicPlayer() : globalVolume(32) {
+MusicPlayer::MusicPlayer() : globalVolume(12) {
   if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
     throw std::runtime_error("SDL_mixer could not initialize! Error: " + std::string(Mix_GetError()));
   }
@@ -27,7 +27,7 @@ void MusicPlayer::playMusic(const std::string& musicPath, int loops = -1) {
   if (Mix_PlayMusic(musicTracks[musicPath], loops) == -1) {
     throw std::runtime_error("Failed to play music! Error: " + std::string(Mix_GetError()));
   }
-  Mix_VolumeMusic(32);
+  Mix_VolumeMusic(2);
 }
 
 void MusicPlayer::playSound(const std::string& soundPath, int loops = 0) {
@@ -42,13 +42,14 @@ void MusicPlayer::playSound(const std::string& soundPath, int loops = 0) {
   if (Mix_PlayChannel(-1, soundEffects[soundPath], loops) == -1) {
     throw std::runtime_error("Failed to play sound effect! Error: " + std::string(Mix_GetError()));
   }
+  Mix_VolumeMusic(5);
 }
 
 void MusicPlayer::setVolume(int volume) {
   if (volume < 0) volume = 0;
   if (volume > 128) volume = 128;
   globalVolume = volume;
-  Mix_VolumeMusic(globalVolume);
+  Mix_VolumeMusic(0);
 }
 
 void MusicPlayer::destroy() {
