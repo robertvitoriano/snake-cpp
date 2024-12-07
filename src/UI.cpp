@@ -13,7 +13,7 @@ void UI::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture, SDL_Tex
   SDL_RenderCopy(renderer, spritesheetTexture, &foodSourceRect, &rect);
 
   for (int i = 0; i < lives; i++) {
-    SDL_Rect heartRect = {WINDOW_WIDTH / 2 - BASIC_UNITY_SIZE * i, 10, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
+    SDL_Rect heartRect = {WINDOW_WIDTH - 50 - BASIC_UNITY_SIZE * i, 10, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
     SDL_Rect heartSourceRect = {0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 
     SDL_RenderCopy(renderer, heartTexture, &heartSourceRect, &heartRect);
