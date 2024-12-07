@@ -17,7 +17,7 @@ snake: $(OBJECTS)
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp $(SRC_DIR)/Game.h
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/main.cpp -o $(BUILD_DIR)/main.o
 
-$(BUILD_DIR)/Snake.o: $(SRC_DIR)/Snake.cpp $(SRC_DIR)/Snake.h
+$(BUILD_DIR)/Snake.o: $(SRC_DIR)/Snake.cpp $(SRC_DIR)/Snake.h $(SRC_DIR)/MusicPlayer.h
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Snake.cpp -o $(BUILD_DIR)/Snake.o
 
 $(BUILD_DIR)/Food.o: $(SRC_DIR)/Food.cpp $(SRC_DIR)/Food.h

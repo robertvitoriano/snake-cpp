@@ -6,6 +6,8 @@
 #include <iostream>
 #include <vector>
 
+#include "MusicPlayer.h"
+
 enum Direction { UP, RIGHT, DOWN, LEFT };
 struct SnakeSegment {
   SDL_Rect rect;

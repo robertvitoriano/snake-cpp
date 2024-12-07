@@ -21,7 +21,6 @@ class Game {
   Snake snake;
   Food food;
   UI ui;
-  MusicPlayer musicPlayer;
   Renderer renderer;
   SDL_Window *window;
   SDL_Renderer *gameRenderer;

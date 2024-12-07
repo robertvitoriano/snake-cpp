@@ -12,8 +12,8 @@ Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true
   }
 
   backgroundTexture = renderer.createTexture("assets/images/background.png");
-
-  musicPlayer.play("assets/sounds/background.mp3", -1);
+  MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+  musicPlayer.playMusic("assets/sounds/background.mp3");
 }
 
 Game::~Game() {
@@ -44,7 +44,6 @@ void Game::handleFoodEating() {
 
   for (const SnakeSegment &segment : snakeBody) {
     if (checkCollision(food.getRect(), segment.rect)) {
-      musicPlayer.play("assets/sounds/sx/eat.mp3", 0);
       snake.increaseSize();
       food.reset();
       ui.updateScore();
