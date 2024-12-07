@@ -4,7 +4,7 @@ SDL_FLAGS = $(shell sdl2-config --cflags --libs) -lSDL2_image -lSDL2_mixer -lSDL
 
 BUILD_DIR = build
 SRC_DIR = src
-OBJECTS = $(BUILD_DIR)/main.o $(BUILD_DIR)/Snake.o $(BUILD_DIR)/Food.o $(BUILD_DIR)/UI.o $(BUILD_DIR)/Game.o $(BUILD_DIR)/Renderer.o $(BUILD_DIR)/MusicPlayer.o
+OBJECTS = $(BUILD_DIR)/main.o $(BUILD_DIR)/Snake.o $(BUILD_DIR)/Food.o $(BUILD_DIR)/UI.o $(BUILD_DIR)/Game.o $(BUILD_DIR)/Graphics.o $(BUILD_DIR)/MusicPlayer.o
 
 all: $(BUILD_DIR) snake
 
@@ -26,13 +26,13 @@ $(BUILD_DIR)/Food.o: $(SRC_DIR)/Food.cpp $(SRC_DIR)/Food.h
 $(BUILD_DIR)/UI.o: $(SRC_DIR)/UI.cpp $(SRC_DIR)/UI.h
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/UI.cpp -o $(BUILD_DIR)/UI.o
 
-$(BUILD_DIR)/Renderer.o: $(SRC_DIR)/Renderer.cpp $(SRC_DIR)/Renderer.h
-	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Renderer.cpp -o $(BUILD_DIR)/Renderer.o
+$(BUILD_DIR)/Graphics.o: $(SRC_DIR)/Graphics.cpp $(SRC_DIR)/Graphics.h
+	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Graphics.cpp -o $(BUILD_DIR)/Graphics.o
 	
 $(BUILD_DIR)/MusicPlayer.o: $(SRC_DIR)/MusicPlayer.cpp $(SRC_DIR)/MusicPlayer.h
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/MusicPlayer.cpp -o $(BUILD_DIR)/MusicPlayer.o
 
-$(BUILD_DIR)/Game.o: $(SRC_DIR)/Game.cpp $(SRC_DIR)/Game.h $(SRC_DIR)/Snake.h $(SRC_DIR)/Food.h  $(SRC_DIR)/UI.h $(SRC_DIR)/Renderer.h $(SRC_DIR)/MusicPlayer.h
+$(BUILD_DIR)/Game.o: $(SRC_DIR)/Game.cpp $(SRC_DIR)/Game.h $(SRC_DIR)/Snake.h $(SRC_DIR)/Food.h  $(SRC_DIR)/UI.h $(SRC_DIR)/Graphics.h $(SRC_DIR)/MusicPlayer.h
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Game.cpp -o $(BUILD_DIR)/Game.o
 
 clean:

@@ -6,7 +6,7 @@
 #include <string>
 
 #include "GameConstants.h"
-#include "Renderer.h"
+#include "Graphics.h"
 
 class UI {
  public:
@@ -19,7 +19,7 @@ class UI {
  private:
   SDL_Rect foodSourceRect;
   SDL_Rect rect;
-  Renderer gameRenderer;
+  Graphics gameRenderer;
   int score;
   int lives;
 };

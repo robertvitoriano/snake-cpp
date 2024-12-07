@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "Food.h"
+#include "Graphics.h"
 #include "MusicPlayer.h"
-#include "Renderer.h"
 #include "Snake.h"
 #include "UI.h"
 class Game {
@@ -21,7 +21,7 @@ class Game {
   Snake snake;
   Food food;
   UI ui;
-  Renderer renderer;
+  Graphics graphics;
   SDL_Window *window;
   SDL_Renderer *gameRenderer;
   SDL_Texture *spritesheetTexture;

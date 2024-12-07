@@ -1,6 +1,6 @@
-#include "Renderer.h"
+#include "Graphics.h"
 
-Renderer::Renderer() : window(nullptr), renderer(nullptr), texture(nullptr) {
+Graphics::Graphics() : window(nullptr), renderer(nullptr), texture(nullptr) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     throw std::runtime_error("SDL_Init Error: " + std::string(SDL_GetError()));
   }
@@ -14,7 +14,7 @@ Renderer::Renderer() : window(nullptr), renderer(nullptr), texture(nullptr) {
   }
 }
 
-SDL_Renderer *Renderer::createRenderer(std::string gameName) {
+SDL_Renderer *Graphics::createRenderer(std::string gameName) {
   if (!renderer) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -35,9 +35,9 @@ SDL_Renderer *Renderer::createRenderer(std::string gameName) {
   return renderer;
 }
 
-Renderer::~Renderer() { destroyRenderer(); }
+Graphics::~Graphics() { destroyRenderer(); }
 
-SDL_Texture *Renderer::createTexture(std::string imagePath) {
+SDL_Texture *Graphics::createTexture(std::string imagePath) {
   if (!renderer) {
     throw std::runtime_error("Renderer not initialized.");
   }
@@ -59,7 +59,7 @@ SDL_Texture *Renderer::createTexture(std::string imagePath) {
   return texture;
 }
 
-void Renderer::drawText(std::string text, SDL_Color color, Position position, SDL_Renderer *renderer) {
+void Graphics::drawText(std::string text, SDL_Color color, Position position, SDL_Renderer *renderer) {
   TTF_Font *font = TTF_OpenFont("assets/fonts/BigBlueTermPlusNerdFontPropo-Regular.ttf", 24);
   if (!font) {
     SDL_Log("Failed to load font: %s", TTF_GetError());
@@ -90,7 +90,7 @@ void Renderer::drawText(std::string text, SDL_Color color, Position position, SD
   SDL_DestroyTexture(textTexture);
   TTF_CloseFont(font);
 }
-void Renderer::destroyRenderer() {
+void Graphics::destroyRenderer() {
   if (renderer) {
     SDL_DestroyRenderer(renderer);
   }

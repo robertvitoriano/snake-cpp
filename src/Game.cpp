@@ -3,15 +3,15 @@
 #include "GameConstants.h"
 
 Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true), gameOver(false) {
-  gameRenderer = renderer.createRenderer("Snake Game");
-  spritesheetTexture = renderer.createTexture("assets/images/spritesheet.png");
-  heartTexture = renderer.createTexture("assets/images/heart.png");
+  gameRenderer = graphics.createRenderer("Snake Game");
+  spritesheetTexture = graphics.createTexture("assets/images/spritesheet.png");
+  heartTexture = graphics.createTexture("assets/images/heart.png");
   if (!spritesheetTexture) {
-    renderer.destroyRenderer();
+    graphics.destroyRenderer();
     throw std::runtime_error("Failed to load spritesheet texture");
   }
 
-  backgroundTexture = renderer.createTexture("assets/images/background.png");
+  backgroundTexture = graphics.createTexture("assets/images/background.png");
   MusicPlayer &musicPlayer = MusicPlayer::getInstance();
   musicPlayer.playMusic("assets/sounds/background.mp3", -1);
 }
@@ -20,7 +20,7 @@ Game::~Game() {
   SDL_DestroyTexture(spritesheetTexture);
   SDL_DestroyTexture(backgroundTexture);
 
-  renderer.destroyRenderer();
+  graphics.destroyRenderer();
 }
 
 void Game::run() {
@@ -74,7 +74,7 @@ void Game::render() {
   } else {
     SDL_Color textColor = {255, 255, 255};
     Position postion = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
-    renderer.drawText("Game over!", textColor, postion, gameRenderer);
+    graphics.drawText("Game over!", textColor, postion, gameRenderer);
     SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
   }
   SDL_RenderPresent(gameRenderer);

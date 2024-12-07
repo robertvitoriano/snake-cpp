@@ -10,10 +10,10 @@
 
 #include "GameConstants.h"
 
-class Renderer {
+class Graphics {
  public:
-  Renderer();
-  ~Renderer();
+  Graphics();
+  ~Graphics();
   void destroyRenderer();
   SDL_Renderer *createRenderer(std::string gameName);
   SDL_Texture *createTexture(std::string imagePath);
