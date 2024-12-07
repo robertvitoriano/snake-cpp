@@ -10,16 +10,16 @@ MusicPlayer::MusicPlayer() {
 
 MusicPlayer::~MusicPlayer() { destroy(); }
 
-void MusicPlayer::play(std::string musicPath) {
-  Mix_Music *backgroundMusic = Mix_LoadMUS(musicPath.c_str());
-  if (!backgroundMusic) {
+void MusicPlayer::play(std::string musicPath, int loops) {
+  Mix_Music *music = Mix_LoadMUS(musicPath.c_str());
+  if (!music) {
     throw std::runtime_error("Failed to load background music! Error: " + std::string(Mix_GetError()));
   }
 
-  if (Mix_PlayMusic(backgroundMusic, -1) == -1) {
+  if (Mix_PlayMusic(music, loops) == -1) {
     throw std::runtime_error("Failed to play background music! Error: " + std::string(Mix_GetError()));
   }
-  Mix_VolumeMusic(0);
+  Mix_VolumeMusic(64);
 }
 
 void MusicPlayer::setVolume(int volume) {
