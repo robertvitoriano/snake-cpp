@@ -47,6 +47,11 @@ class Snake {
   bool wasHit;
   Uint32 hitTimer;
   Uint32 hitInterval;
+  bool isBlinking;
+  Uint32 blinkStartTime;
+  int blinkDuration;
+  int blinkInterval;
+  void renderBlinkingSnake(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
 };
 
 #endif

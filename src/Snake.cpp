@@ -3,7 +3,15 @@
 #include "GameConstants.h"
 
 Snake::Snake(int xPos, int yPos)
-    : collidedWithBody(false), collidedWithWall(false), lives(5), hitTimer(0), hitInterval(5000) {
+    : collidedWithBody(false),
+      collidedWithWall(false),
+      lives(5),
+      hitTimer(0),
+      hitInterval(5000),
+      isBlinking(false),
+      blinkStartTime(0),
+      blinkDuration(2000),
+      blinkInterval(200) {
   bodySourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   cornerSourceRect = {64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
   headSourceRect = {32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
@@ -21,8 +29,12 @@ void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
     std::cerr << "Body is empty!" << std::endl;
     return;
   }
-  renderSnakeHead(renderer, spritesheetTexture);
-  renderSnakeBody(renderer, spritesheetTexture);
+  if (isBlinking) {
+    renderBlinkingSnake(renderer, spritesheetTexture);
+  } else {
+    renderSnakeHead(renderer, spritesheetTexture);
+    renderSnakeBody(renderer, spritesheetTexture);
+  }
 }
 
 void Snake::update() {
@@ -98,6 +110,23 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
       SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
     }
     SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
+  }
+}
+
+void Snake::renderBlinkingSnake(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
+  Uint32 currentTime = SDL_GetTicks();
+  if ((currentTime - blinkStartTime) / blinkInterval % 2 == 0) {
+    renderSnakeHead(renderer, spritesheetTexture);
+    renderSnakeBody(renderer, spritesheetTexture);
+  } else {
+    SDL_SetTextureColorMod(spritesheetTexture, 255, 0, 0);
+    renderSnakeHead(renderer, spritesheetTexture);
+    renderSnakeBody(renderer, spritesheetTexture);
+    SDL_SetTextureColorMod(spritesheetTexture, 255, 255, 255);
+  }
+
+  if (currentTime > blinkStartTime + blinkDuration) {
+    isBlinking = false;
   }
 }
 
@@ -184,5 +213,8 @@ void Snake::handleHit() {
 
     MusicPlayer& musicPlayer = MusicPlayer::getInstance();
     musicPlayer.playSound("assets/sounds/sx/hit.wav", 0);
+
+    isBlinking = true;
+    blinkStartTime = SDL_GetTicks();
   }
 }
