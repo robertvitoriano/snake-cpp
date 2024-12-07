@@ -16,6 +16,9 @@ Renderer::Renderer() : window(nullptr), renderer(nullptr), texture(nullptr) {
 
 SDL_Renderer *Renderer::createRenderer(std::string gameName) {
   if (!renderer) {
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     window = SDL_CreateWindow(gameName.c_str(), 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window) {
       destroyRenderer();

@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++17 -g -I/usr/include/SDL2
-SDL_FLAGS = $(shell sdl2-config --cflags --libs) -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+SDL_FLAGS = $(shell sdl2-config --cflags --libs) -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lGL -lGLEW
 
 BUILD_DIR = build
 SRC_DIR = src
