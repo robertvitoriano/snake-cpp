@@ -130,6 +130,8 @@ void Snake::renderBlinkingSnake(SDL_Renderer* renderer, SDL_Texture* spritesheet
 }
 
 void Snake::moveY(int dy) {
+  Direction lastDirection = this->direction;
+
   if (dy > 0)
     this->direction = DOWN;
   else if (dy < 0)
@@ -140,6 +142,10 @@ void Snake::moveY(int dy) {
   }
 
   SnakeSegment& headSegment = this->body[0];
+  if ((lastDirection == UP && this->direction == DOWN || lastDirection == DOWN && this->direction == UP) &&
+      this->collidedWithWall == false) {
+    headSegment.rect.x += BASIC_UNITY_SIZE;
+  }
   headSegment.rect.y += dy;
 
   if (headSegment.rect.y < 0) {
@@ -153,8 +159,11 @@ void Snake::moveY(int dy) {
 }
 
 void Snake::moveX(int dx) {
-  if (dx > 0)
+  Direction lastDirection = this->direction;
+  if (dx > 0) {
     this->direction = RIGHT;
+  }
+
   else if (dx < 0)
     this->direction = LEFT;
 
@@ -163,6 +172,10 @@ void Snake::moveX(int dx) {
   }
 
   SnakeSegment& headSegment = body[0];
+  if ((lastDirection == LEFT && this->direction == RIGHT || lastDirection == RIGHT && this->direction == LEFT) &&
+      this->collidedWithWall == false) {
+    headSegment.rect.y += BASIC_UNITY_SIZE;
+  }
   headSegment.rect.x += dx;
 
   if (headSegment.rect.x < 0) {
