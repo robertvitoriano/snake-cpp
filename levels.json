@@ -1,0 +1,9 @@
+{
+  "name":" The endless forest",
+  "backingTrack":"assets/sounds/background.mp3",
+  "background":"assets/images/background.png",
+  "powerUps":[
+    {"type":"health", "timeToSpawn":20,"quantity":3}
+  ],
+  "duration":20
+}

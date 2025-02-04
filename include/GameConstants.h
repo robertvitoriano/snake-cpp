@@ -12,4 +12,9 @@ struct Position {
   int y;
 };
 
+struct Size {
+  int width;
+  int height;
+};
+
 #endif

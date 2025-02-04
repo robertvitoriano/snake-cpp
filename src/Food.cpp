@@ -1,4 +1,5 @@
 #include "Food.h"
+
 #include "GameConstants.h"
 
 Food::Food() {
@@ -24,6 +25,4 @@ const SDL_Rect &Food::getRect() {
   return rect;
 }
 
-bool Food::isOutOfBounds() const {
-  return x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT;
-}
+bool Food::isOutOfBounds() const { return x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT; }

@@ -2,18 +2,49 @@
 
 #include "GameConstants.h"
 
-Game::Game() : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2), running(true), gameOver(false) {
+Game::Game()
+    : snake(20, WINDOW_HEIGHT / 2 - BASIC_UNITY_SIZE / 2),
+      running(true),
+      gameOver(false),
+      levelName(""),
+      backingTrack(""),
+      background(""),
+      timer(0),
+      duration(0),
+      durationCounter(0) {
   gameRenderer = graphics.createRenderer("Snake Game");
   spritesheetTexture = graphics.createTexture("assets/images/spritesheet.png");
   heartTexture = graphics.createTexture("assets/images/heart.png");
+
   if (!spritesheetTexture) {
     graphics.destroyRenderer();
     throw std::runtime_error("Failed to load spritesheet texture");
   }
 
-  backgroundTexture = graphics.createTexture("assets/images/background.png");
+  std::string filePath = "levels.json";
+  std::ifstream inputFile(filePath);
+
+  if (!inputFile.is_open()) {
+    std::cerr << "Error: Could not open file " << filePath << std::endl;
+  }
+
+  nlohmann::json levelsData;
+
+  try {
+    inputFile >> levelsData;
+
+    this->levelName = levelsData["name"];
+    this->backingTrack = levelsData["backingTrack"];
+    this->background = levelsData["background"];
+    this->duration = levelsData["duration"];
+  } catch (const nlohmann::json::parse_error &e) {
+    std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+  }
+  inputFile.close();
+
+  backgroundTexture = graphics.createTexture(this->background);
   MusicPlayer &musicPlayer = MusicPlayer::getInstance();
-  musicPlayer.playMusic("assets/sounds/background.mp3", -1);
+  musicPlayer.playMusic(this->backingTrack, -1);
 }
 
 Game::~Game() {
@@ -55,6 +86,7 @@ void Game::update() {
   processInput();
   snake.update();
   ui.setLives(snake.getCurrentLives());
+  this->updateTimer();
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);
@@ -67,17 +99,34 @@ void Game::render() {
     snake.render(gameRenderer, spritesheetTexture);
     food.render(gameRenderer, spritesheetTexture);
     ui.render(gameRenderer, spritesheetTexture, heartTexture);
+    this->renderTimer();
 
     SDL_Color textColor = {255, 255, 255};
-    Position postion = {WINDOW_WIDTH - 40, 20};
+    Position titlePosition = {WINDOW_WIDTH / 2, 100};
 
-  } else {
+    if (this->levelName.size() > 0) {
+      graphics.drawText(this->levelName, textColor, titlePosition, gameRenderer);
+    }
+
+  } else if (snake.getCurrentLives() == 0 || this->timer == this->duration) {
     SDL_Color textColor = {255, 255, 255};
-    Position postion = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
-    graphics.drawText("Game over!", textColor, postion, gameRenderer);
+    Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
+    graphics.drawText("Game over!", textColor, gameOverTextPosition, gameRenderer);
     SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
   }
   SDL_RenderPresent(gameRenderer);
 }
+void Game::updateTimer() {
+  if (SDL_GetTicks() >= this->timer && this->durationCounter < this->duration) {
+    this->timer = SDL_GetTicks() + 1000;
+    this->durationCounter++;
+  } else if (this->timer > this->duration) {
+  }
+}
 
+void Game::renderTimer() {
+  SDL_Color durationTextColor = {255, 255, 255};
+  Position durationTextPosition = {WINDOW_WIDTH / 2, 50};
+  graphics.drawText(std::to_string(this->durationCounter), durationTextColor, durationTextPosition, gameRenderer);
+}
 bool Game::checkCollision(const SDL_Rect &a, const SDL_Rect &b) { return SDL_HasIntersection(&a, &b); }
