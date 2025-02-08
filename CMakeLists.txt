@@ -13,7 +13,11 @@ find_package(SDL2_ttf REQUIRED)
 
 file(GLOB SRC "src/*.cpp" "src/*.c")
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 add_executable(SnakeGame ${SRC})
+
+set_target_properties(SnakeGame PROPERTIES OUTPUT_NAME "SnakeGame.out")
 
 target_link_libraries(SnakeGame 
     SDL2::SDL2
