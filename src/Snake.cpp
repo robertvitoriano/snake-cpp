@@ -16,11 +16,13 @@ Snake::Snake(int xPos, int yPos)
       bodySourceRect({64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
       cornerSourceRect({64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
       headSourceRect({32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
-      body{{{xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}, 0}} {
+      body{{{xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}, 0}},
+      speed(0) {
   for (int i = 0; i < 3; i++) {
     this->increaseSize();
   }
   this->direction = RIGHT;
+  this->speed = SNAKE_INITIAL_SPEED;
 }
 
 void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
@@ -192,16 +194,16 @@ void Snake::handleMovements() {
   const Uint8* keyboardState = SDL_GetKeyboardState(nullptr);
 
   if (keyboardState[SDL_SCANCODE_UP]) {
-    this->moveY(-SNAKE_SPEED);
+    this->moveY(-this->speed);
   }
   if (keyboardState[SDL_SCANCODE_DOWN]) {
-    this->moveY(SNAKE_SPEED);
+    this->moveY(this->speed);
   }
   if (keyboardState[SDL_SCANCODE_RIGHT]) {
-    this->moveX(SNAKE_SPEED);
+    this->moveX(this->speed);
   }
   if (keyboardState[SDL_SCANCODE_LEFT]) {
-    this->moveX(-SNAKE_SPEED);
+    this->moveX(-this->speed);
   }
 }
 
@@ -216,6 +218,7 @@ void Snake::increaseSize() {
     SDL_Rect newSegmentRect = {tailSegment.rect.x, tailSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
     body.push_back({newSegmentRect, 0});
   }
+  this->speed++;
 }
 
 void Snake::handleHit() {

@@ -44,6 +44,7 @@ class Snake {
   bool collidedWithWall;
   bool collidedWithBody;
   int lives;
+  int speed;
   bool wasHit;
   Uint32 hitTimer;
   Uint32 hitInterval;
