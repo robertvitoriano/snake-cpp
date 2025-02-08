@@ -37,6 +37,7 @@ Game::Game()
     this->backingTrack = levelsData["backingTrack"];
     this->background = levelsData["background"];
     this->duration = levelsData["duration"];
+    this->durationCounter = duration;
   } catch (const nlohmann::json::parse_error &e) {
     std::cerr << "Error parsing JSON: " << e.what() << std::endl;
   }
@@ -90,7 +91,8 @@ void Game::update() {
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);
-  if (snake.getCurrentLives() > 0) {
+  bool hasPlayerLost = snake.getCurrentLives() > 0 && this->durationCounter > 0;
+  if (hasPlayerLost) {
     SDL_Rect backgroundRectSrc = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
     SDL_Rect backgroundRectDest = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
@@ -108,7 +110,7 @@ void Game::render() {
       graphics.drawText(this->levelName, textColor, titlePosition, gameRenderer);
     }
 
-  } else if (snake.getCurrentLives() == 0 || this->timer == this->duration) {
+  } else {
     SDL_Color textColor = {255, 255, 255};
     Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
     graphics.drawText("Game over!", textColor, gameOverTextPosition, gameRenderer);
@@ -117,9 +119,9 @@ void Game::render() {
   SDL_RenderPresent(gameRenderer);
 }
 void Game::updateTimer() {
-  if (SDL_GetTicks() >= this->timer && this->durationCounter < this->duration) {
+  if (SDL_GetTicks() >= this->timer && this->durationCounter > 0) {
     this->timer = SDL_GetTicks() + 1000;
-    this->durationCounter++;
+    this->durationCounter--;
   } else if (this->timer > this->duration) {
   }
 }
