@@ -95,16 +95,16 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
       SnakeSegment& prevSegment = this->body[0];
       switch (direction) {
         case LEFT:
-          this->body[i].rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.x = prevSegment.rect.x + BASIC_UNITY_SIZE;
           break;
         case RIGHT:
-          this->body[i].rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.x = prevSegment.rect.x - BASIC_UNITY_SIZE;
           break;
         case UP:
-          this->body[i].rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.y = prevSegment.rect.y + BASIC_UNITY_SIZE;
           break;
         case DOWN:
-          this->body[i].rect.y = prevSegment.rect.y - BASIC_UNITY_SIZE * 0.8;
+          this->body[i].rect.y = prevSegment.rect.y - BASIC_UNITY_SIZE;
 
           break;
       }
