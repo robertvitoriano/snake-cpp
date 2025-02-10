@@ -7,6 +7,7 @@ UI::UI() : lives(0) {
 }
 
 void UI::updateScore() { score++; }
+int UI::getCurrentScore() { return this->score; }
 void UI::setLives(int snakeLives) { lives = snakeLives; }
 
 void UI::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture, SDL_Texture *heartTexture) {
@@ -19,9 +20,11 @@ void UI::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture, SDL_Tex
     SDL_RenderCopy(renderer, heartTexture, &heartSourceRect, &heartRect);
   }
 
-  std::string scoreText = "x " + std::to_string(score);
+  std::string scoreText = "x " + std::to_string(score) + "/" + std::to_string(this->scoreGoal);
   SDL_Color textColor = {255, 255, 255};
   Position textPostion = {rect.x + 80, rect.y + 15};
 
   gameRenderer.drawText(scoreText, textColor, textPostion, renderer);
 }
+
+void UI::setScoreGoal(int scoreGoal) { this->scoreGoal = scoreGoal; }

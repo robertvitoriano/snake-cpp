@@ -5,5 +5,6 @@
   "powerUps":[
     {"type":"health", "timeToSpawn":20,"quantity":3}
   ],
-  "duration":20
+  "duration":20,
+  "score-goal": 5
 }

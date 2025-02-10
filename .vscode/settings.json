@@ -64,6 +64,11 @@
     "span": "cpp",
     "sstream": "cpp",
     "variant": "cpp",
-    "any": "cpp"
+    "any": "cpp",
+    "codecvt": "cpp",
+    "forward_list": "cpp",
+    "fstream": "cpp",
+    "ranges": "cpp",
+    "valarray": "cpp"
   }
 }

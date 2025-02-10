@@ -11,7 +11,8 @@ Game::Game()
       background(""),
       timer(0),
       duration(0),
-      durationCounter(0) {
+      durationCounter(0),
+      scoreGoal(0) {
   gameRenderer = graphics.createRenderer("Snake Game");
   spritesheetTexture = graphics.createTexture("assets/images/spritesheet.png");
   heartTexture = graphics.createTexture("assets/images/heart.png");
@@ -37,7 +38,9 @@ Game::Game()
     this->backingTrack = levelsData["backingTrack"];
     this->background = levelsData["background"];
     this->duration = levelsData["duration"];
-    this->durationCounter = duration;
+    this->durationCounter = this->duration;
+    this->scoreGoal = levelsData["score-goal"];
+    ui.setScoreGoal(this->scoreGoal);
   } catch (const nlohmann::json::parse_error &e) {
     std::cerr << "Error parsing JSON: " << e.what() << std::endl;
   }
@@ -91,8 +94,12 @@ void Game::update() {
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);
-  bool hasPlayerLost = snake.getCurrentLives() > 0 && this->durationCounter > 0;
-  if (hasPlayerLost) {
+
+  bool hasPlayerLost = snake.getCurrentLives() <= 0 && this->durationCounter <= 0;
+
+  bool hasPlayerWon = this->scoreGoal == ui.getCurrentScore();
+
+  if (!hasPlayerLost && !hasPlayerWon) {
     SDL_Rect backgroundRectSrc = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
     SDL_Rect backgroundRectDest = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 
@@ -110,7 +117,13 @@ void Game::render() {
       graphics.drawText(this->levelName, textColor, titlePosition, gameRenderer);
     }
 
-  } else {
+  } else if (hasPlayerWon) {
+    SDL_Color textColor = {255, 255, 255};
+    Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
+    graphics.drawText("You won!", textColor, gameOverTextPosition, gameRenderer);
+    SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
+
+  } else if (hasPlayerLost) {
     SDL_Color textColor = {255, 255, 255};
     Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
     graphics.drawText("Game over!", textColor, gameOverTextPosition, gameRenderer);

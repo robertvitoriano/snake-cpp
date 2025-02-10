@@ -15,12 +15,15 @@ class UI {
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture, SDL_Texture *heartTexture);
   bool hasLost();
   void setLives(int snakeLives);
+  void setScoreGoal(int scoreGoal);
+  int getCurrentScore();
 
  private:
   SDL_Rect foodSourceRect;
   SDL_Rect rect;
   Graphics gameRenderer;
   int score;
+  int scoreGoal;
   int lives;
 };
 #endif

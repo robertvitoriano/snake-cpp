@@ -24,6 +24,7 @@ class Game {
   int timer;
   int duration;
   int durationCounter;
+  int scoreGoal;
   Snake snake;
   Food food;
   UI ui;
