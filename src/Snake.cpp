@@ -18,9 +18,6 @@ Snake::Snake(int xPos, int yPos)
       headSourceRect({32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
       body{{{xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}, 0}},
       speed(0) {
-  for (int i = 0; i < 3; i++) {
-    this->increaseSize();
-  }
   this->direction = RIGHT;
   this->speed = SNAKE_INITIAL_SPEED;
 }
