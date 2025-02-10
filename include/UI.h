@@ -16,6 +16,7 @@ class UI {
   bool hasLost();
   void setLives(int snakeLives);
   void setScoreGoal(int scoreGoal);
+  void resetScore();
   int getCurrentScore();
 
  private:

@@ -28,3 +28,4 @@ void UI::render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture, SDL_Tex
 }
 
 void UI::setScoreGoal(int scoreGoal) { this->scoreGoal = scoreGoal; }
+void UI::resetScore() { this->score = 0; }

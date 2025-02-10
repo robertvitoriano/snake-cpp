@@ -25,6 +25,7 @@ class Game {
   int duration;
   int durationCounter;
   int scoreGoal;
+  int currentLevelIndex;
   Snake snake;
   Food food;
   UI ui;
@@ -34,6 +35,7 @@ class Game {
   SDL_Texture *spritesheetTexture;
   SDL_Texture *heartTexture;
   SDL_Texture *backgroundTexture;
+  nlohmann::json levelsData;
 
   std::string levelName;
   std::string backingTrack;
@@ -41,7 +43,7 @@ class Game {
 
   bool running;
   bool gameOver;
-
+  bool shouldSetLevelData;
   void processInput();
   void handleFoodEating();
   void update();
@@ -49,6 +51,7 @@ class Game {
   bool checkCollision(const SDL_Rect &a, const SDL_Rect &b);
   void updateTimer();
   void renderTimer();
+  void setLevelData();
 };
 
 #endif

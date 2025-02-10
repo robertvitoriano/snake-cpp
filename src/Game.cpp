@@ -12,7 +12,9 @@ Game::Game()
       timer(0),
       duration(0),
       durationCounter(0),
-      scoreGoal(0) {
+      scoreGoal(0),
+      currentLevelIndex(0),
+      shouldSetLevelData(true) {
   gameRenderer = graphics.createRenderer("Snake Game");
   spritesheetTexture = graphics.createTexture("assets/images/spritesheet.png");
   heartTexture = graphics.createTexture("assets/images/heart.png");
@@ -29,26 +31,13 @@ Game::Game()
     std::cerr << "Error: Could not open file " << filePath << std::endl;
   }
 
-  nlohmann::json levelsData;
-
   try {
-    inputFile >> levelsData;
-
-    this->levelName = levelsData["name"];
-    this->backingTrack = levelsData["backingTrack"];
-    this->background = levelsData["background"];
-    this->duration = levelsData["duration"];
-    this->durationCounter = this->duration;
-    this->scoreGoal = levelsData["score-goal"];
-    ui.setScoreGoal(this->scoreGoal);
+    inputFile >> this->levelsData;
+    this->setLevelData();
   } catch (const nlohmann::json::parse_error &e) {
     std::cerr << "Error parsing JSON: " << e.what() << std::endl;
   }
   inputFile.close();
-
-  backgroundTexture = graphics.createTexture(this->background);
-  MusicPlayer &musicPlayer = MusicPlayer::getInstance();
-  musicPlayer.playMusic(this->backingTrack, -1);
 }
 
 Game::~Game() {
@@ -58,6 +47,22 @@ Game::~Game() {
   graphics.destroyRenderer();
 }
 
+void Game::setLevelData() {
+  if (this->shouldSetLevelData) {
+    this->levelName = this->levelsData[currentLevelIndex]["name"];
+    this->backingTrack = this->levelsData[currentLevelIndex]["backingTrack"];
+    this->background = this->levelsData[currentLevelIndex]["background"];
+    this->duration = this->levelsData[currentLevelIndex]["duration"];
+    this->scoreGoal = this->levelsData[currentLevelIndex]["score-goal"];
+    ui.setScoreGoal(this->scoreGoal);
+
+    backgroundTexture = graphics.createTexture(this->background);
+    MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+    musicPlayer.playMusic(this->backingTrack, -1);
+    this->durationCounter = this->duration;
+    this->shouldSetLevelData = false;
+  }
+}
 void Game::run() {
   while (running) {
     update();
@@ -86,6 +91,7 @@ void Game::handleFoodEating() {
   }
 }
 void Game::update() {
+  this->setLevelData();
   handleFoodEating();
   processInput();
   snake.update();
@@ -118,11 +124,13 @@ void Game::render() {
     }
 
   } else if (hasPlayerWon) {
-    SDL_Color textColor = {255, 255, 255};
-    Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
-    graphics.drawText("You won!", textColor, gameOverTextPosition, gameRenderer);
-    SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
-
+    // SDL_Color textColor = {255, 255, 255};
+    // Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
+    // graphics.drawText("You won!", textColor, gameOverTextPosition, gameRenderer);
+    // SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
+    this->currentLevelIndex++;
+    ui.resetScore();
+    this->shouldSetLevelData = true;
   } else if (hasPlayerLost) {
     SDL_Color textColor = {255, 255, 255};
     Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
