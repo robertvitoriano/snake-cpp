@@ -230,3 +230,5 @@ void Snake::handleHit() {
     this->blinkStartTime = SDL_GetTicks();
   }
 }
+
+void Snake::resetLives() { this->lives = 5; }

@@ -23,6 +23,7 @@ class Snake {
   void render(SDL_Renderer *renderer, SDL_Texture *spritesheetTexture);
   void handleHit();
   void update();
+  void resetLives();
 
  private:
   void handleMovements();

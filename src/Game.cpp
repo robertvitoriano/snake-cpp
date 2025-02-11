@@ -61,6 +61,7 @@ void Game::setLevelData() {
     musicPlayer.playMusic(this->backingTrack, -1);
     this->durationCounter = this->duration;
     this->shouldSetLevelData = false;
+    this->snake.resetLives();
   }
 }
 void Game::run() {
