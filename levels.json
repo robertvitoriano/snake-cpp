@@ -6,5 +6,21 @@
     "powerUps": [{ "type": "health", "timeToSpawn": 20, "quantity": 3 }],
     "duration": 20,
     "score-goal": 5
+  },
+  {
+    "name": " The endless desert",
+    "backingTrack": "assets/sounds/background.mp3",
+    "background": "assets/images/background-2.png",
+    "powerUps": [{ "type": "health", "timeToSpawn": 20, "quantity": 3 }],
+    "duration": 20,
+    "score-goal": 5
+  },
+  {
+    "name": " The endless night",
+    "backingTrack": "assets/sounds/background.mp3",
+    "background": "assets/images/the-endless-night.png",
+    "powerUps": [{ "type": "health", "timeToSpawn": 20, "quantity": 3 }],
+    "duration": 20,
+    "score-goal": 5
   }
 ]
