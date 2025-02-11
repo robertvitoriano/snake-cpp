@@ -125,13 +125,7 @@ void Game::render() {
     }
 
   } else if (hasPlayerWon) {
-    // SDL_Color textColor = {255, 255, 255};
-    // Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
-    // graphics.drawText("You won!", textColor, gameOverTextPosition, gameRenderer);
-    // SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
-    this->currentLevelIndex++;
-    ui.resetScore();
-    this->shouldSetLevelData = true;
+    this->loadNextLevel();
   } else if (hasPlayerLost) {
     SDL_Color textColor = {255, 255, 255};
     Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
@@ -140,6 +134,13 @@ void Game::render() {
   }
   SDL_RenderPresent(gameRenderer);
 }
+
+void Game::loadNextLevel() {
+  this->currentLevelIndex++;
+  ui.resetScore();
+  this->shouldSetLevelData = true;
+}
+
 void Game::updateTimer() {
   if (SDL_GetTicks() >= this->timer && this->durationCounter > 0) {
     this->timer = SDL_GetTicks() + 1000;

@@ -52,6 +52,7 @@ class Game {
   void updateTimer();
   void renderTimer();
   void setLevelData();
+  void loadNextLevel();
 };
 
 #endif
