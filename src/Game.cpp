@@ -102,7 +102,7 @@ void Game::update() {
 void Game::render() {
   SDL_RenderClear(gameRenderer);
 
-  bool hasPlayerLost = snake.getCurrentLives() <= 0 && this->durationCounter <= 0;
+  bool hasPlayerLost = snake.getCurrentLives() <= 0 || this->durationCounter <= 0;
 
   bool hasPlayerWon = this->scoreGoal == ui.getCurrentScore();
 
