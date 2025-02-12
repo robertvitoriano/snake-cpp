@@ -78,7 +78,6 @@ void Game::processInput() {
       running = false;
     }
   }
-  snake.update();
 }
 void Game::handleFoodEating() {
   std::vector<SnakeSegment> snakeBody = snake.getBody();

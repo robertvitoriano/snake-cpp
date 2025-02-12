@@ -105,7 +105,6 @@ void Snake::renderSnakeBody(SDL_Renderer* renderer, SDL_Texture* spritesheetText
 
           break;
       }
-      SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
     }
     SDL_RenderCopyEx(renderer, spritesheetTexture, &bodySourceRect, &body[i].rect, 0, nullptr, SDL_FLIP_NONE);
   }
