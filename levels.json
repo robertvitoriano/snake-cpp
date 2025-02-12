@@ -3,7 +3,7 @@
     "name": " The endless forest",
     "backingTrack": "assets/sounds/background.mp3",
     "background": "assets/images/background.png",
-    "powerUps": [{ "type": "health", "quantity": 3 }],
+    "powerUps": [{ "type": 0, "quantity": 3, "image":"assets/images/heart.png" }],
     "duration": 20,
     "score-goal": 5
   },
@@ -11,7 +11,7 @@
     "name": " The endless desert",
     "backingTrack": "assets/sounds/background.mp3",
     "background": "assets/images/background-2.png",
-    "powerUps": [{ "type": "health", "quantity": 3 }],
+    "powerUps": [{ "type": 1, "quantity": 3, "image":"assets/images/clock.png" }],
     "duration": 30,
     "score-goal": 10
   },
@@ -19,7 +19,7 @@
     "name": " The endless night",
     "backingTrack": "assets/sounds/background.mp3",
     "background": "assets/images/the-endless-night.png",
-    "powerUps": [{ "type": "health", "quantity": 3 }],
+    "powerUps": [{ "type": 0, "quantity": 3, "image":"assets/images/heart.png" }],
     "duration": 50,
     "score-goal": 20
   }

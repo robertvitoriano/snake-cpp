@@ -23,10 +23,6 @@ Snake::Snake(int xPos, int yPos)
 }
 
 void Snake::render(SDL_Renderer* renderer, SDL_Texture* spritesheetTexture) {
-  if (this->body.empty()) {
-    std::cerr << "Body is empty!" << std::endl;
-    return;
-  }
   if (this->isBlinking) {
     this->renderBlinkingSnake(renderer, spritesheetTexture);
   } else {

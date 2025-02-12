@@ -1,18 +1,18 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <Food.h>
+#include <Graphics.h>
+#include <MusicPlayer.h>
 #include <SDL2/SDL.h>
+#include <Snake.h>
+#include <UI.h>
 
+#include <PowerUp.hpp>
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
-
-#include "Food.h"
-#include "Graphics.h"
-#include "MusicPlayer.h"
-#include "Snake.h"
-#include "UI.h"
 
 class Game {
  public:
@@ -40,6 +40,7 @@ class Game {
   std::string levelName;
   std::string backingTrack;
   std::string background;
+  std::vector<PowerUp> powerUps;
 
   bool running;
   bool gameOver;

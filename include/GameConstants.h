@@ -16,5 +16,5 @@ struct Size {
   int width;
   int height;
 };
-
+enum class PowerUpType { Health, Time };
 #endif

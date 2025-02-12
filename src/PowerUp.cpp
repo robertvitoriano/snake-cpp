@@ -1,7 +1,10 @@
 #include <PowerUp.hpp>
 
-PowerUp::PowerUp() : _position({0, 0}), _size({BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}) {
+PowerUp::PowerUp(std::string imageSrc, PowerUpType type)
+    : _position({0, 0}), _size({BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}) {
   this->_position.x = WINDOW_WIDTH / 2;
+  this->_imageSrc = imageSrc;
+  this->_type = type;
 }
 
 void PowerUp::update() { this->_position.y += 1; }
@@ -14,3 +17,7 @@ void PowerUp::render(SDL_Renderer *renderer, SDL_Texture *powerUpTexture) {
 
   SDL_RenderCopy(renderer, powerUpTexture, &powerUpSourceRect, &powerUpRect);
 }
+
+std::string PowerUp::getImageSrc() { return this->_imageSrc; }
+
+PowerUpType PowerUp::getType() { return this->_type; }
