@@ -9,7 +9,7 @@
 
 class PowerUp {
  public:
-  PowerUp(std::string imageSrc, PowerUpType type);
+  PowerUp(std::string imageSrc, PowerUpType type, int timeToShow);
 
   void render(SDL_Renderer *renderer, SDL_Texture *powerUpTexture);
 
@@ -19,6 +19,8 @@ class PowerUp {
   void checkCollision(const SDL_Rect &a, const SDL_Rect &b);
   std::string getImageSrc();
   PowerUpType getType();
+  int getTimeToShow();
+  bool isOutOfScreen();
 
  private:
   Position _position;
@@ -26,5 +28,6 @@ class PowerUp {
   SDL_Rect _powerUpRect;
   std::string _imageSrc;
   PowerUpType _type;
+  int _timeToShow;
 };
 #endif

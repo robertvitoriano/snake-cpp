@@ -1,6 +1,6 @@
 #include <PowerUp.hpp>
 
-PowerUp::PowerUp(std::string imageSrc, PowerUpType type)
+PowerUp::PowerUp(std::string imageSrc, PowerUpType type, int timeToShow)
     : _position({0, 0}), _size({BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}) {
   static bool seedInitialized = false;
 
@@ -12,6 +12,7 @@ PowerUp::PowerUp(std::string imageSrc, PowerUpType type)
   this->_position.x = rand() % (WINDOW_WIDTH - BASIC_UNITY_SIZE);
   this->_imageSrc = imageSrc;
   this->_type = type;
+  this->_timeToShow = timeToShow;
 }
 
 void PowerUp::update() { this->_position.y += 1; }
@@ -28,3 +29,6 @@ void PowerUp::render(SDL_Renderer *renderer, SDL_Texture *powerUpTexture) {
 std::string PowerUp::getImageSrc() { return this->_imageSrc; }
 
 PowerUpType PowerUp::getType() { return this->_type; }
+
+int PowerUp::getTimeToShow() { return this->_timeToShow; }
+bool PowerUp::isOutOfScreen() { return this->_position.y > WINDOW_HEIGHT; }

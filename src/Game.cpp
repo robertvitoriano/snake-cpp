@@ -14,10 +14,18 @@ Game::Game()
       durationCounter(0),
       scoreGoal(0),
       currentLevelIndex(0),
-      shouldSetLevelData(true) {
+      shouldSetLevelData(true),
+      currentPowerUp(nullptr) {
   gameRenderer = graphics.createRenderer("Snake Game");
   spritesheetTexture = graphics.createTexture("assets/images/spritesheet.png");
   heartTexture = graphics.createTexture("assets/images/heart.png");
+
+  static bool seedInitialized = false;
+
+  if (!seedInitialized) {
+    srand(static_cast<unsigned>(time(nullptr)));
+    seedInitialized = true;
+  }
 
   if (!spritesheetTexture) {
     graphics.destroyRenderer();
@@ -59,7 +67,7 @@ void Game::setLevelData() {
 
     for (const auto &powerUpRaw : this->levelsData[currentLevelIndex]["powerUps"]) {
       for (int i = 0; i <= powerUpRaw["quantity"]; i++) {
-        this->powerUps.push_back(PowerUp(powerUpRaw["image"], powerUpRaw["type"]));
+        this->powerUps.push_back(PowerUp(powerUpRaw["image"], powerUpRaw["type"], rand() % this->duration));
         bool textureAlreadyStored =
             this->powerUpTexturesMap.find(powerUpRaw["image"]) != this->powerUpTexturesMap.end();
         if (!textureAlreadyStored) {
@@ -110,8 +118,18 @@ void Game::update() {
   snake.update();
   ui.setLives(snake.getCurrentLives());
   this->updateTimer();
+
+  if (this->currentPowerUp != nullptr && this->currentPowerUp->isOutOfScreen()) {
+    this->currentPowerUp = nullptr;
+  }
+
   for (PowerUp &powerUp : this->powerUps) {
-    powerUp.update();
+    if (powerUp.getTimeToShow() >= this->durationCounter && this->currentPowerUp == nullptr) {
+      this->currentPowerUp = &powerUp;
+    }
+  }
+  if (this->currentPowerUp != nullptr) {
+    this->currentPowerUp->update();
   }
 }
 void Game::render() {
@@ -139,8 +157,14 @@ void Game::render() {
       graphics.drawText(this->levelName, textColor, titlePosition, gameRenderer);
     }
 
+    if (this->currentPowerUp != nullptr) {
+      this->currentPowerUp->render(this->gameRenderer, this->powerUpTexturesMap[this->currentPowerUp->getImageSrc()]);
+    }
+
     for (PowerUp &powerUp : this->powerUps) {
-      powerUp.render(this->gameRenderer, this->powerUpTexturesMap[powerUp.getImageSrc()]);
+      if (powerUp.getTimeToShow() >= this->durationCounter) {
+        this->currentPowerUp = &powerUp;
+      }
     }
 
   } else if (hasPlayerWon) {

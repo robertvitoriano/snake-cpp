@@ -9,12 +9,13 @@
 #include <UI.h>
 
 #include <PowerUp.hpp>
+#include <cstdlib>
+#include <ctime>
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
 #include <vector>
-
 class Game {
  public:
   Game();
@@ -43,7 +44,7 @@ class Game {
   std::string backingTrack;
   std::string background;
   std::vector<PowerUp> powerUps;
-
+  PowerUp *currentPowerUp;
   bool running;
   bool gameOver;
   bool shouldSetLevelData;
