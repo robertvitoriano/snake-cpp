@@ -110,6 +110,9 @@ void Game::update() {
   snake.update();
   ui.setLives(snake.getCurrentLives());
   this->updateTimer();
+  for (PowerUp &powerUp : this->powerUps) {
+    powerUp.update();
+  }
 }
 void Game::render() {
   SDL_RenderClear(gameRenderer);
