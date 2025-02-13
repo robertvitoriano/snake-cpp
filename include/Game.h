@@ -57,6 +57,7 @@ class Game {
   void renderTimer();
   void setLevelData();
   void loadNextLevel();
+  void handlePowerUps();
 };
 
 #endif

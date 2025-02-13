@@ -118,7 +118,9 @@ void Game::update() {
   snake.update();
   ui.setLives(snake.getCurrentLives());
   this->updateTimer();
-
+  this->handlePowerUps();
+}
+void Game::handlePowerUps() {
   if (this->currentPowerUp != nullptr && this->currentPowerUp->isOutOfScreen()) {
     this->currentPowerUp = nullptr;
   }
@@ -159,12 +161,6 @@ void Game::render() {
 
     if (this->currentPowerUp != nullptr) {
       this->currentPowerUp->render(this->gameRenderer, this->powerUpTexturesMap[this->currentPowerUp->getImageSrc()]);
-    }
-
-    for (PowerUp &powerUp : this->powerUps) {
-      if (powerUp.getTimeToShow() >= this->durationCounter) {
-        this->currentPowerUp = &powerUp;
-      }
     }
 
   } else if (hasPlayerWon) {
