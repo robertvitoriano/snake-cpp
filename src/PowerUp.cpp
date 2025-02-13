@@ -2,7 +2,14 @@
 
 PowerUp::PowerUp(std::string imageSrc, PowerUpType type)
     : _position({0, 0}), _size({BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}) {
-  this->_position.x = (WINDOW_WIDTH / 2) - BASIC_UNITY_SIZE;
+  static bool seedInitialized = false;
+
+  if (!seedInitialized) {
+    srand(static_cast<unsigned>(time(nullptr)));
+    seedInitialized = true;
+  }
+
+  this->_position.x = rand() % (WINDOW_WIDTH - BASIC_UNITY_SIZE);
   this->_imageSrc = imageSrc;
   this->_type = type;
 }

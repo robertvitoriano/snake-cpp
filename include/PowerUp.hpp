@@ -3,6 +3,8 @@
 #include <GameConstants.h>
 #include <SDL2/SDL.h>
 
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 class PowerUp {
