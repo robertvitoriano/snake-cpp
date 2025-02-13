@@ -12,6 +12,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class Game {
@@ -35,6 +36,7 @@ class Game {
   SDL_Texture *spritesheetTexture;
   SDL_Texture *heartTexture;
   SDL_Texture *backgroundTexture;
+  std::unordered_map<std::string, SDL_Texture *> powerUpTexturesMap;
   nlohmann::json levelsData;
 
   std::string levelName;

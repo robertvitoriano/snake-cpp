@@ -2,7 +2,7 @@
 
 PowerUp::PowerUp(std::string imageSrc, PowerUpType type)
     : _position({0, 0}), _size({BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}) {
-  this->_position.x = WINDOW_WIDTH / 2;
+  this->_position.x = (WINDOW_WIDTH / 2) - BASIC_UNITY_SIZE;
   this->_imageSrc = imageSrc;
   this->_type = type;
 }

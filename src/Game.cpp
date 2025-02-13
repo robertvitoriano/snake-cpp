@@ -54,10 +54,17 @@ void Game::setLevelData() {
     this->background = this->levelsData[currentLevelIndex]["background"];
     this->duration = this->levelsData[currentLevelIndex]["duration"];
     this->scoreGoal = this->levelsData[currentLevelIndex]["score-goal"];
+
     this->powerUps.clear();
+
     for (const auto &powerUpRaw : this->levelsData[currentLevelIndex]["powerUps"]) {
-      for (int i = 0; i <= powerUpRaw["quantity"]) {
-        this->powerUps.push_back(PowerUp(powerUpRaw["image"], powerUpRaw["type"]))
+      for (int i = 0; i <= powerUpRaw["quantity"]; i++) {
+        this->powerUps.push_back(PowerUp(powerUpRaw["image"], powerUpRaw["type"]));
+        bool textureAlreadyStored =
+            this->powerUpTexturesMap.find(powerUpRaw["image"]) != this->powerUpTexturesMap.end();
+        if (!textureAlreadyStored) {
+          this->powerUpTexturesMap[powerUpRaw["image"]] = this->graphics.createTexture(powerUpRaw["image"]);
+        }
       }
     }
     ui.setScoreGoal(this->scoreGoal);
@@ -130,7 +137,7 @@ void Game::render() {
     }
 
     for (PowerUp &powerUp : this->powerUps) {
-      powerUp.render();  // instantiate textures in Game main class and pass them to power ups
+      powerUp.render(this->gameRenderer, this->powerUpTexturesMap[powerUp.getImageSrc()]);
     }
 
   } else if (hasPlayerWon) {
