@@ -3,7 +3,7 @@
     "name": " The endless forest",
     "backingTrack": "assets/sounds/background.mp3",
     "background": "assets/images/background.png",
-    "powerUps": [{ "type": 0, "quantity": 2, "image":"assets/images/clock.png" }, { "type": 1, "quantity": 2, "image":"assets/images/heart.png" }],
+    "powerUps": [{ "type": 0, "quantity": 1, "image":"assets/images/clock.png" }, { "type": 1, "quantity": 1, "image":"assets/images/heart.png" }],
     "duration": 100,
     "score-goal": 25
   },

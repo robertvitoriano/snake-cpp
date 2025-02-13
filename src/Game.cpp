@@ -67,7 +67,9 @@ void Game::setLevelData() {
 
     for (const auto &powerUpRaw : this->levelsData[currentLevelIndex]["powerUps"]) {
       for (int i = 0; i <= powerUpRaw["quantity"]; i++) {
-        this->powerUps.push_back(PowerUp(powerUpRaw["image"], powerUpRaw["type"], rand() % this->duration));
+        int timeToShowUp = rand() % ((this->duration * 6) / 10);
+        this->powerUps.push_back(PowerUp(powerUpRaw["image"], powerUpRaw["type"], timeToShowUp));
+
         bool textureAlreadyStored =
             this->powerUpTexturesMap.find(powerUpRaw["image"]) != this->powerUpTexturesMap.end();
         if (!textureAlreadyStored) {
