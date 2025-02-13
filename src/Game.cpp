@@ -20,7 +20,7 @@ Game::Game()
   spritesheetTexture = graphics.createTexture("assets/images/spritesheet.png");
   heartTexture = graphics.createTexture("assets/images/heart.png");
 
-  static bool seedInitialized = false;
+  bool seedInitialized = false;
 
   if (!seedInitialized) {
     srand(static_cast<unsigned>(time(nullptr)));
