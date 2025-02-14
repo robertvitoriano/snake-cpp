@@ -159,7 +159,7 @@ void Game::render() {
   SDL_RenderClear(gameRenderer);
 
   bool hasPlayerLost = snake.getCurrentLives() <= 0 || this->durationCounter <= 0;
-
+  bool isLastLevel = this->currentLevelIndex == this->levelsData.size() - 1;
   bool hasPlayerWon = this->scoreGoal == ui.getCurrentScore();
 
   if (!hasPlayerLost && !hasPlayerWon) {
@@ -184,7 +184,12 @@ void Game::render() {
       this->currentPowerUp->render(this->gameRenderer, this->powerUpTexturesMap[this->currentPowerUp->getImageSrc()]);
     }
 
-  } else if (hasPlayerWon) {
+  } else if (hasPlayerWon && isLastLevel) {
+    SDL_Color textColor = {255, 255, 255};
+    Position gameOverTextPosition = {WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2};
+    graphics.drawText("You won the game, congratulations!", textColor, gameOverTextPosition, gameRenderer);
+    SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
+  } else if (hasPlayerWon && !isLastLevel) {
     this->loadNextLevel();
   } else if (hasPlayerLost) {
     SDL_Color textColor = {255, 255, 255};
@@ -192,6 +197,7 @@ void Game::render() {
     graphics.drawText("Game over!", textColor, gameOverTextPosition, gameRenderer);
     SDL_SetRenderDrawColor(gameRenderer, 0, 0, 0, 2555);
   }
+
   SDL_RenderPresent(gameRenderer);
 }
 
