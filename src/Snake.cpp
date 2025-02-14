@@ -235,3 +235,11 @@ void Snake::resetBody() {
     body.erase(body.begin() + 1, body.end());
   }
 }
+
+void Snake::resetSpeed() { this->speed = SNAKE_INITIAL_SPEED; }
+
+void Snake::reset() {
+  this->resetBody();
+  this->resetLives();
+  this->resetSpeed();
+}
