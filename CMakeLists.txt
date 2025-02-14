@@ -5,6 +5,11 @@ project(SnakeGame)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include /usr/include)
+include_directories(thirdparty/nlohmann)
+include_directories(thirdparty/sdl2/include)
+include_directories(thirdparty/sdl2_image/include)
+include_directories(thirdparty/sdl2_mixer/include)
+include_directories(thirdparty/sdl2_ttf/include)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
