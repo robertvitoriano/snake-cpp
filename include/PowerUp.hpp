@@ -21,6 +21,7 @@ class PowerUp {
   PowerUpType getType();
   int getTimeToShow();
   bool isOutOfScreen();
+  const SDL_Rect &getRect();
 
  private:
   Position _position;

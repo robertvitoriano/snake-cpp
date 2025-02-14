@@ -15,15 +15,17 @@ PowerUp::PowerUp(std::string imageSrc, PowerUpType type, int timeToShow)
   this->_timeToShow = timeToShow;
 }
 
-void PowerUp::update() { this->_position.y += 1; }
+void PowerUp::update() {
+  this->_position.y += 4;
+  this->_powerUpRect = {this->_position.x, this->_position.y, this->_size.width, this->_size.height};
+}
 
 void PowerUp::onHit() {}
 
 void PowerUp::render(SDL_Renderer *renderer, SDL_Texture *powerUpTexture) {
-  SDL_Rect powerUpRect = {this->_position.x, this->_position.y, this->_size.width, this->_size.height};
   SDL_Rect powerUpSourceRect = {0, 0, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
 
-  SDL_RenderCopy(renderer, powerUpTexture, &powerUpSourceRect, &powerUpRect);
+  SDL_RenderCopy(renderer, powerUpTexture, &powerUpSourceRect, &this->_powerUpRect);
 }
 
 std::string PowerUp::getImageSrc() { return this->_imageSrc; }
@@ -32,3 +34,4 @@ PowerUpType PowerUp::getType() { return this->_type; }
 
 int PowerUp::getTimeToShow() { return this->_timeToShow; }
 bool PowerUp::isOutOfScreen() { return this->_position.y > WINDOW_HEIGHT; }
+const SDL_Rect &PowerUp::getRect() { return this->_powerUpRect; }

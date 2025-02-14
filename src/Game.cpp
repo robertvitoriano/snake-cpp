@@ -122,6 +122,7 @@ void Game::update() {
   this->updateTimer();
   this->handlePowerUps();
 }
+
 void Game::handlePowerUps() {
   if (this->currentPowerUp != nullptr && this->currentPowerUp->isOutOfScreen()) {
     this->currentPowerUp = nullptr;
@@ -134,6 +135,10 @@ void Game::handlePowerUps() {
   }
   if (this->currentPowerUp != nullptr) {
     this->currentPowerUp->update();
+    std::vector<SnakeSegment> snakeBody = snake.getBody();
+    if (checkCollision(this->currentPowerUp->getRect(), snakeBody[0].rect)) {
+      this->currentPowerUp = nullptr;
+    }
   }
 }
 void Game::render() {
