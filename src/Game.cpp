@@ -150,6 +150,8 @@ void Game::handlePowerUps() {
       }
       this->currentPowerUp->destroy();
       this->currentPowerUp = nullptr;
+      MusicPlayer &musicPlayer = MusicPlayer::getInstance();
+      musicPlayer.playSound("assets/sounds/sx/power-up.wav", 0);
     }
   }
 }
