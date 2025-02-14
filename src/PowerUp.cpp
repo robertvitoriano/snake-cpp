@@ -16,7 +16,7 @@ PowerUp::PowerUp(std::string imageSrc, PowerUpType type, int timeToShow)
 }
 
 void PowerUp::update() {
-  this->_position.y += 4;
+  this->_position.y += 1;
   this->_powerUpRect = {this->_position.x, this->_position.y, this->_size.width, this->_size.height};
 }
 

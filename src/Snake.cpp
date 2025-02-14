@@ -227,3 +227,5 @@ void Snake::handleHit() {
 }
 
 void Snake::resetLives() { this->lives = 5; }
+
+void Snake::increaseHealth() { this->lives++; }

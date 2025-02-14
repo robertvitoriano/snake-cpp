@@ -137,6 +137,12 @@ void Game::handlePowerUps() {
     this->currentPowerUp->update();
     std::vector<SnakeSegment> snakeBody = snake.getBody();
     if (checkCollision(this->currentPowerUp->getRect(), snakeBody[0].rect)) {
+      switch (this->currentPowerUp->getType()) {
+        case PowerUpType::Health:
+          this->snake.increaseHealth();
+        case PowerUpType::Time:
+          this->durationCounter += 10;
+      }
       this->currentPowerUp = nullptr;
     }
   }

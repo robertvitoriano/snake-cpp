@@ -24,6 +24,7 @@ class Snake {
   void handleHit();
   void update();
   void resetLives();
+  void increaseHealth();
 
  private:
   void handleMovements();
