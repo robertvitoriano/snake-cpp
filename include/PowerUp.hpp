@@ -9,7 +9,7 @@
 
 class PowerUp {
  public:
-  PowerUp(std::string imageSrc, PowerUpType type, int timeToShow);
+  PowerUp(int id, std::string imageSrc, PowerUpType type, int timeToShow);
 
   void render(SDL_Renderer *renderer, SDL_Texture *powerUpTexture);
 
@@ -22,6 +22,8 @@ class PowerUp {
   int getTimeToShow();
   bool isOutOfScreen();
   const SDL_Rect &getRect();
+  bool isDestroyed();
+  void destroy();
 
  private:
   Position _position;
@@ -30,5 +32,7 @@ class PowerUp {
   std::string _imageSrc;
   PowerUpType _type;
   int _timeToShow;
+  int _id;
+  bool _wasDestroyed;
 };
 #endif

@@ -64,11 +64,12 @@ void Game::setLevelData() {
     this->scoreGoal = this->levelsData[currentLevelIndex]["score-goal"];
 
     this->powerUps.clear();
-
+    int i = 2;
     for (const auto &powerUpRaw : this->levelsData[currentLevelIndex]["powerUps"]) {
-      for (int i = 0; i <= powerUpRaw["quantity"]; i++) {
+      for (int j = 0; j <= powerUpRaw["quantity"]; j++) {
         int timeToShowUp = rand() % ((this->duration * 6) / 10);
-        this->powerUps.push_back(PowerUp(powerUpRaw["image"], powerUpRaw["type"], timeToShowUp));
+        int powerUpId = i + j;
+        this->powerUps.push_back(PowerUp(powerUpId, powerUpRaw["image"], powerUpRaw["type"], timeToShowUp));
 
         bool textureAlreadyStored =
             this->powerUpTexturesMap.find(powerUpRaw["image"]) != this->powerUpTexturesMap.end();
@@ -76,6 +77,8 @@ void Game::setLevelData() {
           this->powerUpTexturesMap[powerUpRaw["image"]] = this->graphics.createTexture(powerUpRaw["image"]);
         }
       }
+
+      i += rand() % 100;
     }
     ui.setScoreGoal(this->scoreGoal);
 
@@ -129,7 +132,7 @@ void Game::handlePowerUps() {
   }
 
   for (PowerUp &powerUp : this->powerUps) {
-    if (powerUp.getTimeToShow() >= this->durationCounter && this->currentPowerUp == nullptr) {
+    if (powerUp.getTimeToShow() >= this->durationCounter && this->currentPowerUp == nullptr && !powerUp.isDestroyed()) {
       this->currentPowerUp = &powerUp;
     }
   }
@@ -140,9 +143,12 @@ void Game::handlePowerUps() {
       switch (this->currentPowerUp->getType()) {
         case PowerUpType::Health:
           this->snake.increaseHealth();
+          break;
         case PowerUpType::Time:
           this->durationCounter += 10;
+          break;
       }
+      this->currentPowerUp->destroy();
       this->currentPowerUp = nullptr;
     }
   }

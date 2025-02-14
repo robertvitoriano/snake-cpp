@@ -1,7 +1,7 @@
 #include <PowerUp.hpp>
 
-PowerUp::PowerUp(std::string imageSrc, PowerUpType type, int timeToShow)
-    : _position({0, 0}), _size({BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}) {
+PowerUp::PowerUp(int id, std::string imageSrc, PowerUpType type, int timeToShow)
+    : _position({0, 0}), _size({BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}), _wasDestroyed(false) {
   static bool seedInitialized = false;
 
   if (!seedInitialized) {
@@ -13,6 +13,7 @@ PowerUp::PowerUp(std::string imageSrc, PowerUpType type, int timeToShow)
   this->_imageSrc = imageSrc;
   this->_type = type;
   this->_timeToShow = timeToShow;
+  this->_id = id;
 }
 
 void PowerUp::update() {
@@ -35,3 +36,7 @@ PowerUpType PowerUp::getType() { return this->_type; }
 int PowerUp::getTimeToShow() { return this->_timeToShow; }
 bool PowerUp::isOutOfScreen() { return this->_position.y > WINDOW_HEIGHT; }
 const SDL_Rect &PowerUp::getRect() { return this->_powerUpRect; }
+
+bool PowerUp::isDestroyed() { return this->_wasDestroyed; }
+
+void PowerUp::destroy() { this->_wasDestroyed = true; }
