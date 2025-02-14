@@ -88,6 +88,7 @@ void Game::setLevelData() {
     this->durationCounter = this->duration;
     this->shouldSetLevelData = false;
     this->snake.resetLives();
+    this->snake.resetBody();
   }
 }
 void Game::run() {

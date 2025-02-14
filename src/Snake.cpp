@@ -229,3 +229,9 @@ void Snake::handleHit() {
 void Snake::resetLives() { this->lives = 5; }
 
 void Snake::increaseHealth() { this->lives++; }
+
+void Snake::resetBody() {
+  if (body.size() > 2) {
+    body.erase(body.begin() + 1, body.end());
+  }
+}

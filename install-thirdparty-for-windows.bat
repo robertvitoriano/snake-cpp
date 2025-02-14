@@ -8,7 +8,7 @@ mkdir .\thirdparty\sdl2_ttf\include
 
 REM Download nlohmann JSON library
 curl -L -o .\thirdparty\nlohmann\json.hpp https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
-echo "nlohmann/json.hpp downloaded successfully!"
+echo "nlohmann/json.hpp downloaded successfully!".
 
 REM Download SDL2 (you'll need to download the appropriate files from the SDL2 website or package)
 curl -L -o .\thirdparty\sdl2\include\SDL2\SDL.h https://raw.githubusercontent.com/libsdl-org/SDL/main/include/SDL2/SDL.h
