@@ -203,7 +203,7 @@ const std::vector<SnakeSegment>& Snake::getBody() const { return body; }
 
 void Snake::increaseSize() {
   MusicPlayer& musicPlayer = MusicPlayer::getInstance();
-  musicPlayer.playSound("assets/sounds/sx/eat.mp3", 0);
+  musicPlayer.playSound("assets/sounds/sx/eat.wav", 0);
 
   for (int i = 0; i < 3; i++) {
     const SnakeSegment& tailSegment = body.back();
