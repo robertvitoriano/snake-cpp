@@ -4,12 +4,16 @@ project(SnakeGame)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(include /usr/include)
+# Detect OS
+if(WIN32)
+    set(SDL2_DIR "${CMAKE_SOURCE_DIR}/thirdparty/sdl2-win")
+else()
+    set(SDL2_DIR "/usr")
+endif()
+
+include_directories(include)
 include_directories(thirdparty/nlohmann)
-include_directories(thirdparty/sdl2/include)
-include_directories(thirdparty/sdl2_image/include)
-include_directories(thirdparty/sdl2_mixer/include)
-include_directories(thirdparty/sdl2_ttf/include)
+include_directories(${SDL2_DIR}/include)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
