@@ -67,7 +67,7 @@ void Game::setLevelData() {
     int i = 2;
     for (const auto &powerUpRaw : this->levelsData[currentLevelIndex]["powerUps"]) {
       for (int j = 0; j <= powerUpRaw["quantity"]; j++) {
-        int timeToShowUp = rand() % ((this->duration * 6) / 10);
+        int timeToShowUp = rand() % ((this->duration * 8) / 10);
         int powerUpId = i + j;
         this->powerUps.push_back(PowerUp(powerUpId, powerUpRaw["image"], powerUpRaw["type"], timeToShowUp));
 
