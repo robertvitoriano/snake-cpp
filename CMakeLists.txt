@@ -6,9 +6,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Detect OS and set SDL2 directory
 if(WIN32)
-    set(SDL2_DIR "${CMAKE_SOURCE_DIR}/thirdparty/sdl2-win")
+    set(SDL2_DIR "${CMAKE_SOURCE_DIR}/thirdparty/sdl2-win/x86_64-w64-mingw32")
     # For Windows, use MinGW toolchain
     set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/mingw-w64-x86_64.cmake")
+    
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build-win)
 else()
     set(SDL2_DIR "/usr")
