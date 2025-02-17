@@ -1,7 +1,7 @@
 [
   {
     "name": " The endless forest",
-    "backingTrack": "assets/sounds/background.mp3",
+    "backingTrack": "assets/sounds/snake-background-music.wav",
     "background": "assets/images/background.png",
     "powerUps": [{ "type": 0, "quantity": 5, "image":"assets/images/heart.png" }, { "type": 1, "quantity": 4, "image":"assets/images/clock.png" }],
     "duration": 80,
@@ -9,7 +9,7 @@
   },
   {
     "name": " The endless desert",
-    "backingTrack": "assets/sounds/background.mp3",
+    "backingTrack": "assets/sounds/snake-background-music.wav",
     "background": "assets/images/background-2.png",
     "powerUps": [{ "type": 1, "quantity": 3, "image":"assets/images/clock.png" }],
     "duration": 30,
