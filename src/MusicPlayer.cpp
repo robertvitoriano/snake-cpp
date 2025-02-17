@@ -7,7 +7,7 @@ MusicPlayer& MusicPlayer::getInstance() {
   return instance;
 }
 
-MusicPlayer::MusicPlayer() : globalVolume(20) {
+MusicPlayer::MusicPlayer() : globalVolume(100) {
   if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
     throw std::runtime_error("SDL_mixer could not initialize! Error: " + std::string(Mix_GetError()));
   }
