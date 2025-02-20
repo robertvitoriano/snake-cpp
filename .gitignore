@@ -3,3 +3,4 @@ build/*
 *.out
 thirdparty
 build-win/*
+src/*.dll

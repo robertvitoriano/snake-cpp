@@ -4,12 +4,21 @@ project(SnakeGame)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(include /usr/include)
+if(DEFINED CMAKE_TOOLCHAIN_FILE AND EXISTS ${CMAKE_TOOLCHAIN_FILE})
+    message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+    include_directories(${CMAKE_SOURCE_DIR}/include)
+else()
+    message(STATUS "No vcpkg toolchain detected, using system packages")
+    include_directories(include /usr/include)
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_mixer REQUIRED)
-find_package(SDL2_ttf REQUIRED)
+endif()
+
+
+
+find_package(SDL2 CONFIG REQUIRED)
+find_package(SDL2_image CONFIG REQUIRED)
+find_package(SDL2_mixer CONFIG REQUIRED)
+find_package(SDL2_ttf CONFIG REQUIRED)
 
 file(GLOB SRC "src/*.cpp" "src/*.c")
 
