@@ -9,3 +9,4 @@ src/*.dll
 *.pdb
 out
 Debug/*
+windows-build/*
