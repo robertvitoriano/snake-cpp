@@ -4,7 +4,7 @@ project(SnakeGame)
 
 set(CMAKE_CXX_STANDARD 17)
 
-if(DEFINED CMAKE_TOOLCHAIN_FILE AND EXISTS ${CMAKE_TOOLCHAIN_FILE})
+if(WIN32)
     message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
     include_directories(${CMAKE_SOURCE_DIR}/include)
 else()
