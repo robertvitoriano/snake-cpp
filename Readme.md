@@ -6,6 +6,11 @@ Ensure you have the following installed:
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) (with C++ development tools)
 - [vcpkg](https://github.com/microsoft/vcpkg) (for package management)
 
+## Install libraries:
+```sh
+    vcpkg install nlohmann-json sdl2 sdl2-image sdl2-mixer sdl2-ttf
+```
+
 ## Building the Project
 To build the project using CMake and Visual Studio, run the following command inside your build directory:
 
