@@ -21,7 +21,6 @@ find_package(SDL2_mixer CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)
 
 file(GLOB SRC "src/*.cpp" "src/*.c")
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 add_executable(SnakeGame ${SRC})

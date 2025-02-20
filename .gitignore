@@ -4,3 +4,8 @@ build/*
 thirdparty
 build-win/*
 src/*.dll
+*.dll
+*.exe
+*.pdb
+out
+Debug/*
