@@ -1,12 +1,37 @@
-- Build for windows:
+# Build Instructions (Windows)
+
+## Prerequisites
+Ensure you have the following installed:
+- [CMake](https://cmake.org/download/)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/) (with C++ development tools)
+- [vcpkg](https://github.com/microsoft/vcpkg) (for package management)
+
+## Building the Project
+To build the project using CMake and Visual Studio, run the following command inside your build directory:
+
+```sh
 cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+```
 
- - In case of erros by not fiding main function, in the file "SDL_main.h" inside the condition "#if defined(SDL_MAIN_NEEDED) || defined(SDL_MAIN_AVAILABLE"
- 
- add this:
- 
-#define main SDL_main    //Original line. Renames main(){} to SDL_main(){}. 
+This will generate the necessary Visual Studio solution files for compilation.
 
-#define main main        //Added line. Undo the renaming.
+## Fix for Missing `main` Function (SDL)
+If you encounter an **"unresolved external symbol main"** error while linking, you may need to adjust `SDL_main.h`.
 
-reference: https://stackoverflow.com/questions/33400777/error-lnk2019-unresolved-external-symbol-main-referenced-in-function-int-cde/62825741#62825741
+### Solution
+Inside the `SDL_main.h` file, locate the following condition:
+
+```c
+#if defined(SDL_MAIN_NEEDED) || defined(SDL_MAIN_AVAILABLE)
+```
+
+Modify the section by adding the following lines:
+
+```c
+#define main SDL_main  // Original line: Renames main(){} to SDL_main(){}.
+#define main main      // Added line: Undoes the renaming.
+```
+
+### Reference
+For more details on this issue, refer to this [Stack Overflow post](https://stackoverflow.com/a/62825741/62825741).
+
