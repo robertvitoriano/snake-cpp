@@ -8,7 +8,7 @@ if(WIN32)
     message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
     include_directories(${CMAKE_SOURCE_DIR}/include)
 else()
-    message(STATUS "No vcpkg toolchain detected, using system packages")
+    message(STATUS "Linux environment")
     include_directories(include /usr/include)
 
 endif()
