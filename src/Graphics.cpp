@@ -61,6 +61,11 @@ SDL_Texture *Graphics::createTexture(std::string imagePath) {
 
 void Graphics::drawText(std::string text, SDL_Color color, Position position, SDL_Renderer *renderer) {
   TTF_Font *font = TTF_OpenFont("assets/fonts/BigBlueTermPlusNerdFontPropo-Regular.ttf", 24);
+  if (std::filesystem::exists("assets/fonts/BigBlueTermPlusNerdFontPropo-Regular.ttf")) {
+    std::cout << "Font file exists!" << std::endl;
+  } else {
+    std::cout << "Font file does not exist!" << std::endl;
+  }
 
   if (font == NULL) {
     std::cout << "Font is NULL" << std::endl;
