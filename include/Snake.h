@@ -40,6 +40,11 @@ class Snake {
   void checkCollision(const SDL_Rect &a, const SDL_Rect &b);
   void moveY(int dy);
   void moveX(int dx);
+  void move();
+  void toggleMovingUp();
+  void toggleMovingDown();
+  void toggleMovingLeft();
+  void toggleMovingRight();
   void handleHeadBodyHit();
   std::vector<SnakeSegment> body;
   SDL_Rect bodySourceRect;
@@ -51,6 +56,10 @@ class Snake {
   int lives;
   int speed;
   bool wasHit;
+  bool isMovingLeft;
+  bool isMovingRight;
+  bool isMovingDown;
+  bool isMovingUp;
   Uint32 hitTimer;
   Uint32 hitInterval;
   bool isBlinking;

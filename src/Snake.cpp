@@ -17,7 +17,11 @@ Snake::Snake(int xPos, int yPos)
       cornerSourceRect({64, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
       headSourceRect({32, 32, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}),
       body{{{xPos, yPos, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE}, 0}},
-      speed(0) {
+      speed(0),
+      isMovingDown(false),
+      isMovingUp(false),
+      isMovingLeft(false),
+      isMovingRight(false) {
   this->direction = RIGHT;
   this->speed = SNAKE_INITIAL_SPEED;
 }
@@ -186,17 +190,18 @@ void Snake::handleMovements() {
   const Uint8* keyboardState = SDL_GetKeyboardState(nullptr);
 
   if (keyboardState[SDL_SCANCODE_UP]) {
-    this->moveY(-this->speed);
+    this->toggleMovingUp();
   }
   if (keyboardState[SDL_SCANCODE_DOWN]) {
-    this->moveY(this->speed);
+    this->toggleMovingDown();
   }
   if (keyboardState[SDL_SCANCODE_RIGHT]) {
-    this->moveX(this->speed);
+    this->toggleMovingRight();
   }
   if (keyboardState[SDL_SCANCODE_LEFT]) {
-    this->moveX(-this->speed);
+    this->toggleMovingLeft();
   }
+  this->move();
 }
 
 const std::vector<SnakeSegment>& Snake::getBody() const { return body; }
@@ -242,4 +247,39 @@ void Snake::reset() {
   this->resetBody();
   this->resetLives();
   this->resetSpeed();
+}
+void Snake::move() {
+  if (this->isMovingUp) {
+    this->moveY(-this->speed);
+  } else if (this->isMovingDown) {
+    this->moveY(this->speed);
+  } else if (this->isMovingRight) {
+    this->moveX(this->speed);
+  } else if (this->isMovingLeft) {
+    this->moveX(-this->speed);
+  }
+}
+void Snake::toggleMovingUp() {
+  this->isMovingUp = true;
+  this->isMovingDown = false;
+  this->isMovingLeft = false;
+  this->isMovingRight = false;
+}
+void Snake::toggleMovingDown() {
+  this->isMovingDown = true;
+  this->isMovingUp = false;
+  this->isMovingLeft = false;
+  this->isMovingUp = false;
+}
+void Snake::toggleMovingRight() {
+  this->isMovingRight = true;
+  this->isMovingUp = false;
+  this->isMovingDown = false;
+  this->isMovingLeft = false;
+}
+void Snake::toggleMovingLeft() {
+  this->isMovingLeft = true;
+  this->isMovingRight = false;
+  this->isMovingUp = false;
+  this->isMovingDown = false;
 }
