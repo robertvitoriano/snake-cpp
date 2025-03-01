@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 if(WIN32)
     message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
+
     include_directories(${CMAKE_SOURCE_DIR}/include)
 else()
     message(STATUS "Linux environment")
