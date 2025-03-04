@@ -12,6 +12,11 @@ if(WIN32)
   set(LIB_DIR windows-libraries/lib)
 else()
   set(INC_DIR include usr/include)
+  find_package(SDL2 CONFIG REQUIRED)
+  find_package(SDL2_image CONFIG REQUIRED)
+  find_package(SDL2_mixer CONFIG REQUIRED)
+  find_package(SDL2_ttf CONFIG REQUIRED)
+  find_package(nlohmann_json CONFIG REQUIRED)
 endif()
 
 # Collect source files
