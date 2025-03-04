@@ -40,3 +40,11 @@ Modify the section by adding the following lines:
 ### Reference
 For more details on this issue, refer to this [Stack Overflow post](https://stackoverflow.com/a/62825741/62825741).
 
+
+### With mingw:
+
+you have to download the mingw version of the libraries and place them in windows-libraries folder
+
+then place the .dll files at the root,
+then run:
+     cmake -G "MinGW Makefiles" ..

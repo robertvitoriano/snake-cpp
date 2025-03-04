@@ -15,7 +15,7 @@ MusicPlayer::MusicPlayer() : globalVolume(100) {
 
 MusicPlayer::~MusicPlayer() { destroy(); }
 
-void MusicPlayer::playMusic(const std::string& musicPath, int loops = -1) {
+void MusicPlayer::playMusic(const std::string& musicPath, int loops) {
   if (musicTracks.find(musicPath) == musicTracks.end()) {
     Mix_Music* music = Mix_LoadMUS(musicPath.c_str());
     if (!music) {
@@ -30,7 +30,7 @@ void MusicPlayer::playMusic(const std::string& musicPath, int loops = -1) {
   Mix_VolumeMusic(globalVolume);
 }
 
-void MusicPlayer::playSound(const std::string& soundPath, int loops = 0) {
+void MusicPlayer::playSound(const std::string& soundPath, int loops) {
   if (soundEffects.find(soundPath) == soundEffects.end()) {
     Mix_Chunk* sound = Mix_LoadWAV(soundPath.c_str());
     if (!sound) {
@@ -53,13 +53,13 @@ void MusicPlayer::setVolume(int volume) {
 }
 
 void MusicPlayer::destroy() {
-  for (auto& [path, music] : musicTracks) {
-    Mix_FreeMusic(music);
+  for (std::map<std::string, Mix_Music*>::iterator it = musicTracks.begin(); it != musicTracks.end(); ++it) {
+    Mix_FreeMusic(it->second);
   }
   musicTracks.clear();
 
-  for (auto& [path, sound] : soundEffects) {
-    Mix_FreeChunk(sound);
+  for (std::map<std::string, Mix_Chunk*>::iterator it = soundEffects.begin(); it != soundEffects.end(); ++it) {
+    Mix_FreeChunk(it->second);
   }
   soundEffects.clear();
 

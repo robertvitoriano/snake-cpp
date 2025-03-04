@@ -1,39 +1,26 @@
 cmake_minimum_required(VERSION 3.10)
+project(SnakeGame CXX)
 
-project(SnakeGame)
-
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+# Directories
+set(SRC_DIR src)
+set(INC_DIR include windows-libraries/include)
+set(LIB_DIR windows-libraries/lib)
 
-if(WIN32)
-    message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:CONSOLE")
+# Collect source files
+file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
 
-    include_directories(${CMAKE_SOURCE_DIR}/include)
-else()
-    message(STATUS "Linux environment")
-    include_directories(include /usr/include)
+# Define executable
+add_executable(${PROJECT_NAME} ${SRC_FILES})
 
-endif()
+# Include directories
+target_include_directories(${PROJECT_NAME} PRIVATE ${INC_DIR})
 
+# Link directories
+target_link_directories(${PROJECT_NAME} PRIVATE ${LIB_DIR})
 
-
-find_package(SDL2 CONFIG REQUIRED)
-find_package(SDL2_image CONFIG REQUIRED)
-find_package(SDL2_mixer CONFIG REQUIRED)
-find_package(SDL2_ttf CONFIG REQUIRED)
-find_package(nlohmann_json CONFIG REQUIRED)
-
-file(GLOB SRC "src/*.cpp" "src/*.c")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
-
-add_executable(SnakeGame ${SRC})
-
-set_target_properties(SnakeGame PROPERTIES OUTPUT_NAME "SnakeGame.out")
-
-target_link_libraries(SnakeGame 
-    SDL2::SDL2
-    SDL2_image::SDL2_image
-    SDL2_mixer::SDL2_mixer
-    SDL2_ttf::SDL2_ttf
-    nlohmann_json::nlohmann_json
-)
+# Link libraries for MinGW
+target_link_libraries(${PROJECT_NAME} mingw32 SDL2main SDL2 SDL2_mixer SDL2_ttf SDL2_image)

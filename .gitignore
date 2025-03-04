@@ -11,3 +11,4 @@ out
 Debug/*
 windows-build/*
 vcpkg_installed
+windows-libraries
