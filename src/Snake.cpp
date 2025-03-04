@@ -215,7 +215,7 @@ void Snake::increaseSize() {
     SDL_Rect newSegmentRect = {tailSegment.rect.x, tailSegment.rect.y, BASIC_UNITY_SIZE, BASIC_UNITY_SIZE};
     body.push_back({newSegmentRect, 0});
   }
-  this->speed++;
+  if (this->speed % 2 != 0) this->speed++;
 }
 
 void Snake::handleHit() {
